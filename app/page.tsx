@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  useMiniKit,
   useAddFrame,
-  useOpenUrl,
-} from "@coinbase/onchainkit/minikit";
+} from "@/hooks/useAddFrame";
+import {  useOpenUrl } from "@/hooks/useOpenUrl";
+import { useMiniKit } from "@/hooks/useMiniKit";
 import { Name, Identity, Badge } from "@coinbase/onchainkit/identity";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Snake from "./components/snake";

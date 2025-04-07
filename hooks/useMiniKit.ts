@@ -1,7 +1,7 @@
-import { MiniKitContext, emptyContext } from '@/minikit/MiniKitProvider';
+import { MiniKitContext, emptyContext } from '@/providers/mini-app-provider';
+import { MiniKitContextType } from '@/providers/types';
 import sdk from '@farcaster/frame-sdk';
 import { useContext, useState } from 'react';
-import type { MiniKitContextType } from '../types';
 
 type UseMiniKitReturn = {
   setFrameReady: () => Promise<MiniKitContextType>;

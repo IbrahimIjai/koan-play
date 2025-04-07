@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { useAppKit } from "@reown/appkit/react";
-const ConnectChecker: FC<ButtonProps> = ({ children, size = "xl", ...props }) => {
+const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const isMounted = useIsMounted();
   const { open } = useAppKit();
   const { isDisconnected, isConnecting } = useAccount();
@@ -23,13 +23,7 @@ const ConnectChecker: FC<ButtonProps> = ({ children, size = "xl", ...props }) =>
 
   if (isDisconnected)
     return (
-      <Button
-        onClick={() => open({ view: "Connect" })}
-        className="w-full"
-        variant="secondary"
-      >
-        Connect Wallet
-      </Button>
+      <Button onClick={() => open({ view: "Connect" })} className="shadow-2xl">Connect Wallet</Button>
     );
 
   return <>{children}</>;

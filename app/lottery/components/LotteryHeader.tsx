@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useState } from "react";
 import TicketModal from "./TicketModal";
+import ConnectButton from "@/components/connect-button";
 
 export default function LotteryHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prizePot, setPrizePot] = useState("$36,636");
-  const { isConnected } = useAccount();
 
   // Sparkle animation components
   const Sparkle = ({ className = "" }: { className?: string }) => (
@@ -26,7 +25,8 @@ export default function LotteryHeader() {
       <Sparkle className="absolute left-10 bottom-10 animate-ping" />
       <Sparkle className="absolute right-10 top-10 animate-bounce" />
 
-      <h1 className="text-3xl font-bold text-white mb-2">
+      <ConnectButton />
+      <h1 className="text-lg font-bold text-white mb-2">
         The PancakeSwap Lottery
       </h1>
 

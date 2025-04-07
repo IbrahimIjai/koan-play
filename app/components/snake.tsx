@@ -10,7 +10,8 @@ import React, {
   createContext,
   useContext,
 } from "react";
-import { useOpenUrl, useNotification } from "@coinbase/onchainkit/minikit";
+import { useOpenUrl } from "@/hooks/useOpenUrl";
+import { useNotification } from "@/hooks/useNotification";
 import {
   Transaction,
   TransactionButton,

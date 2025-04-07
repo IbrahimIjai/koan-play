@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { LotteryService } from "../lib/lotteryService";
 
 type TicketModalProps = {
   isOpen: boolean;
@@ -26,6 +27,8 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
   const [userBalance] = useState("100");
   const [randomizedNumbers, setRandomizedNumbers] = useState<number[][]>([]);
   const [insufficientBalance, setInsufficientBalance] = useState(false);
+  const [showNumbers, setShowNumbers] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isConnected } = useAccount();
 
@@ -60,7 +63,7 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
   const generateRandomNumbers = (count: number) => {
     const newNumbers = [];
     for (let i = 0; i < count; i++) {
-      // Generate a 6-digit random number
+      // Generate a 6-digit random number (1000000-1999999 as per contract)
       const digits = [];
       for (let j = 0; j < 6; j++) {
         digits.push(Math.floor(Math.random() * 10));
@@ -81,7 +84,7 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
     toast.info("Numbers randomized!");
   };
 
-  const handleBuyTickets = () => {
+  const handleBuyTickets = async () => {
     if (!isConnected) {
       toast.error("Please connect your wallet first");
       return;
@@ -93,10 +96,29 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
       return;
     }
 
-    toast.success(
-      `Bought ${ticketCount} ticket${ticketCount !== 1 ? "s" : ""}!`,
-    );
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      const lotteryService = LotteryService.getInstance();
+      const success = await lotteryService.buyTickets(
+        ticketCount,
+        randomizedNumbers,
+      );
+
+      if (success) {
+        toast.success(
+          `Bought ${ticketCount} ticket${ticketCount !== 1 ? "s" : ""}!`,
+        );
+        onClose();
+      } else {
+        toast.error("Failed to buy tickets. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error buying tickets:", error);
+      toast.error("There was an error purchasing tickets");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getDiscountPercentage = () => {
@@ -180,13 +202,80 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
             </div>
           </div>
 
-          <Button
-            onClick={handleBuyTickets}
-            className="w-full bg-teal-400 hover:bg-teal-500 text-black py-6 rounded-full transition-all duration-200"
-            disabled={insufficientBalance}
-          >
-            Buy Instantly
-          </Button>
+          {showNumbers && (
+            <div className="mt-4 border border-gray-700 rounded-lg p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-white font-semibold">Your Numbers</h3>
+                <button
+                  onClick={handleRandomize}
+                  className="text-teal-400 text-sm font-medium hover:text-teal-300 flex items-center"
+                >
+                  <span className="mr-1">Randomize</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                    <path d="M3 21v-5h5"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div className="space-y-3 max-h-40 overflow-y-auto">
+                {randomizedNumbers.map((digits, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between bg-gray-800 p-2 rounded-lg"
+                  >
+                    <div className="text-gray-400 text-sm">#{index + 1}</div>
+                    <div className="flex gap-1">
+                      {digits.map((digit, idx) => (
+                        <div
+                          key={idx}
+                          className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white"
+                        >
+                          {digit}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-gray-400 text-xs mt-4">
+                "Match first 1" means matching the first digit from the left,
+                and so on. Prize brackets don't stack — only the highest match
+                counts.
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <Button
+              onClick={handleBuyTickets}
+              className="w-full bg-teal-400 hover:bg-teal-500 text-black py-6 rounded-full transition-all duration-200"
+              disabled={insufficientBalance || isSubmitting}
+            >
+              {isSubmitting ? "Processing..." : "Buy Instantly"}
+            </Button>
+
+            <Button
+              onClick={() => setShowNumbers(!showNumbers)}
+              variant="ghost"
+              className="w-full text-teal-400 hover:text-teal-300 border border-gray-700 rounded-full"
+            >
+              {showNumbers ? "Hide Numbers" : "View/Edit Numbers"}
+            </Button>
+          </div>
 
           <div className="text-gray-400 text-sm text-center px-4">
             &quot;Buy Instantly&quot; chooses random numbers, with no duplicates

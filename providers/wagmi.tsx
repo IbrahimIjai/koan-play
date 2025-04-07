@@ -3,7 +3,7 @@
 import { wagmiAdapter, projectId } from "@/configs/reown";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAppKit } from "@reown/appkit/react";
-import { mainnet, arbitrum } from "@reown/appkit/networks";
+import { base } from "@reown/appkit/networks";
 import React, { useMemo, type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 import { useProviderDependencies } from "@/hooks/useProviderDependencies";
@@ -24,11 +24,13 @@ const metadata = {
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: [mainnet, arbitrum],
-  defaultNetwork: mainnet,
+  showWallets: false,
+  networks: [base],
+  defaultNetwork: base,
   metadata: metadata,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
+    socials: ["farcaster", "google"],
   },
 });
 
