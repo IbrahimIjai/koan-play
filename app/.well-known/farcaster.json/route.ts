@@ -13,10 +13,10 @@ export async function GET() {
       homeUrl: "https://koan-play.vercel.app",
       iconUrl: "https://koan-play.vercel.app/snake.png",
       imageUrl: "https://koan-play.vercel.app/snake.png",
-      buttonTitle: `Launch Koan Play`,
+      buttonTitle: "Launch Koan Play",
       splashImageUrl: "https://koan-play.vercel.app/snake.png",
-      splashBackgroundColor: `#ffffff`,
-      webhookUrl: `${URL}/api/webhook`,
+      splashBackgroundColor: "#ffffff",
+      webhookUrl: "https://koan-play.vercel.app//api/webhook",
     },
   });
 }
