@@ -8,7 +8,7 @@ export async function GET() {
       signature: process.env.FARCASTER_SIGNATURE,
     },
     frame: {
-      version: "nextjs",
+      version: "next",
       name: "Koan Play",
       homeUrl: "https://koan-play.vercel.app",
       iconUrl: "https://koan-play.vercel.app/snake.png",
