@@ -52,8 +52,8 @@ export default function HowToPlay() {
             Check for Prizes
           </h3>
           <p className="text-gray-300">
-            Once the round's over, come back to the page and check to see if
-            you've won!
+            Once the round&apos;s over, come back to the page and check to see
+            if you&apos;ve won!
           </p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function HowToPlay() {
           The digits on your ticket must match in the correct order to win.
         </p>
         <p className="text-gray-300 mb-6">
-          Here's an example lottery draw, with two tickets, A and B.
+          Here&apos;s an example lottery draw, with two tickets, A and B.
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -74,18 +74,19 @@ export default function HowToPlay() {
             <ul className="list-disc pl-5 space-y-4">
               <li>
                 Ticket A: The first 3 digits and the last 2 digits match, but
-                the 4th digit is wrong, so this ticket only wins a "Match first
-                3" prize.
+                the 4th digit is wrong, so this ticket only wins a &quot;Match
+                first 3&quot; prize.
               </li>
               <li>
                 Ticket B: Even though the last 5 digits match, the first digit
-                is wrong, so this ticket doesn't win a prize.
+                is wrong, so this ticket doesn&apos;t win a prize.
               </li>
             </ul>
             <p>
-              Prize brackets don't 'stack': if you match the first 3 digits in
-              order, you'll only win prizes from the 'Match 3' bracket, and not
-              from 'Match 1' and 'Match 2'.
+              Prize brackets don&apos;t &quot;stack&quot;: if you match the
+              first 3 digits in order, you&apos;ll only win prizes from the
+              &quot;Match 3&quot; bracket, and not from &quot;Match 1&quot; and
+              &quot;Match 2&quot;.
             </p>
           </div>
 

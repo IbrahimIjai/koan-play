@@ -14,12 +14,12 @@ export default function NextDraw() {
     seconds: 0,
   });
 
-  const [prizePot, setPrizePot] = useState({
+  const prizePot = {
     usd: "$36,636",
     cake: "20,391 USDC",
-  });
+  };
 
-  const [ticketInfo, setTicketInfo] = useState([
+  const ticketInfo = [
     { id: 1, name: "Match first 1", amount: "408 USDC", usdValue: "~$733" },
     { id: 2, name: "Match first 2", amount: "612 USDC", usdValue: "~$1,099" },
     { id: 3, name: "Match first 3", amount: "1,020 USDC", usdValue: "~$1,832" },
@@ -27,7 +27,7 @@ export default function NextDraw() {
     { id: 5, name: "Match first 5", amount: "4,078 USDC", usdValue: "~$7,327" },
     { id: 6, name: "Match all 6", amount: "8,156 USDC", usdValue: "~$14,654" },
     { id: 7, name: "Burn", amount: "4,078 USDC", usdValue: "~$7,327" },
-  ]);
+  ];
 
   const { isConnected } = useAccount();
 

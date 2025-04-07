@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export default function FinishedRounds() {
   const [activeTab, setActiveTab] = useState("all"); // "all" or "your"
-  const [currentRound, setCurrentRound] = useState({
+  const currentRound = {
     id: 1587,
     drawn: "Apr 5, 2025, 1:00 AM",
     winningNumber: [5, 6, 4, 1, 1, 3],
@@ -64,7 +64,7 @@ export default function FinishedRounds() {
         rewardEach: "",
       },
     ],
-  });
+  };
 
   const { isConnected } = useAccount();
 

@@ -6,8 +6,7 @@ import ConnectButton from "@/components/connect-button";
 
 export default function LotteryHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [prizePot, setPrizePot] = useState("$36,636");
-
+  const prizePot = "$36,636";
   // Sparkle animation components
   const Sparkle = ({ className = "" }: { className?: string }) => (
     <div className={`text-yellow-300 text-2xl ${className}`}>✨</div>

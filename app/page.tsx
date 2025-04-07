@@ -1,9 +1,7 @@
 "use client";
 
-import {
-  useAddFrame,
-} from "@/hooks/useAddFrame";
-import {  useOpenUrl } from "@/hooks/useOpenUrl";
+import { useAddFrame } from "@/hooks/useAddFrame";
+import { useOpenUrl } from "@/hooks/useOpenUrl";
 import { useMiniKit } from "@/hooks/useMiniKit";
 import { Name, Identity, Badge } from "@coinbase/onchainkit/identity";
 import { useCallback, useEffect, useMemo, useState } from "react";

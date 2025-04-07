@@ -39,6 +39,7 @@ import { useAccount } from "wagmi";
 import { encodeAbiParameters, type Address as AddressType } from "viem";
 import ArrowSvg from "../svg/ArrowSvg";
 import SnakeLogo from "../svg/SnakeLogo";
+import { Button } from "@/components/ui/button";
 
 const MAX_SCORES = 8;
 const FPS = 60;
@@ -373,22 +374,22 @@ function DPad({ onDirectionChange }: DPadProps) {
     <div className="flex">
       <div className="grid grid-cols-3">
         <div className="h-12 w-12" />
-        <button
+        <Button
           className="h-12 w-12 bg-black rounded-t-lg hover:shadow-dpad-hover active:shadow-dpad-pressed active:translate-y-[1px] bg-dpad-gradient shadow-dpad"
           onClick={() => onDirectionChange(MoveState.UP)}
         />
         <div className="h-12 w-12" />
-        <button
+        <Button
           className="h-12 w-12 bg-black rounded-t-lg hover:shadow-dpad-hover active:shadow-dpad-pressed active:translate-x-[1px] bg-dpad-gradient -rotate-90"
           onClick={() => onDirectionChange(MoveState.LEFT)}
         />
         <div className="h-12 w-12 bg-black" />
-        <button
+        <Button
           className="h-12 w-12 bg-black rounded-t-lg hover:shadow-dpad-hover active:shadow-dpad-pressed active:translate-x-[-1px] bg-dpad-gradient shadow-dpad rotate-90"
           onClick={() => onDirectionChange(MoveState.RIGHT)}
         />
         <div className="h-12 w-12" />
-        <button
+        <Button
           className="h-12 w-12 bg-black rounded-t-lg hover:shadow-dpad-hover active:shadow-dpad-pressed active:translate-y-[-1px] bg-dpad-gradient shadow-dpad rotate-180"
           onClick={() => onDirectionChange(MoveState.DOWN)}
         />

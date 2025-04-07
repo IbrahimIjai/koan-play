@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
 import {
@@ -21,44 +21,44 @@ type TicketModalProps = {
 
 export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
   const [ticketCount, setTicketCount] = useState(1);
-  const [ticketCost] = useState("5");
-  const [totalCost, setTotalCost] = useState("5");
+  // const [ticketCost] = useState("5");
+  const totalCost = "5"
   const [maxTickets] = useState(50);
   const [userBalance] = useState("100");
   const [randomizedNumbers, setRandomizedNumbers] = useState<number[][]>([]);
-  const [insufficientBalance, setInsufficientBalance] = useState(false);
+  const [insufficientBalance] = useState(false);
   const [showNumbers, setShowNumbers] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { isConnected } = useAccount();
 
-  useEffect(() => {
-    if (isOpen) {
-      generateRandomNumbers(ticketCount);
-      // Check balance when modal opens
-      checkBalance(ticketCount);
-    }
-  }, [isOpen, ticketCount]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     generateRandomNumbers(ticketCount);
+  //     // Check balance when modal opens
+  //     checkBalance(ticketCount);
+  //   }
+  // }, [isOpen, ticketCount]);
 
   // Calculate total cost when ticket count changes
-  useEffect(() => {
-    // Slight discount for bulk purchases
-    const discountDivisor = 300;
-    const discount = Math.max(0, ticketCount - 1) / discountDivisor;
-    const discountedCost = Number(ticketCost) * ticketCount * (1 - discount);
-    setTotalCost(discountedCost.toFixed(2));
+  // useEffect(() => {
+  //   // Slight discount for bulk purchases
+  //   const discountDivisor = 300;
+  //   const discount = Math.max(0, ticketCount - 1) / discountDivisor;
+  //   const discountedCost = Number(ticketCost) * ticketCount * (1 - discount);
+  //   setTotalCost(discountedCost.toFixed(2));
 
-    // Check balance whenever cost changes
-    checkBalance(ticketCount);
-  }, [ticketCount, ticketCost]);
+  //   // Check balance whenever cost changes
+  //   checkBalance(ticketCount);
+  // }, [ticketCount, ticketCost]);
 
-  const checkBalance = (count: number) => {
-    const discountDivisor = 300;
-    const discount = Math.max(0, count - 1) / discountDivisor;
-    const cost = Number(ticketCost) * count * (1 - discount);
+  // const checkBalance = (count: number) => {
+  //   const discountDivisor = 300;
+  //   const discount = Math.max(0, count - 1) / discountDivisor;
+  //   const cost = Number(ticketCost) * count * (1 - discount);
 
-    setInsufficientBalance(cost > Number(userBalance));
-  };
+  //   setInsufficientBalance(cost > Number(userBalance));
+  // };
 
   const generateRandomNumbers = (count: number) => {
     const newNumbers = [];
@@ -252,9 +252,9 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
               </div>
 
               <div className="text-gray-400 text-xs mt-4">
-                "Match first 1" means matching the first digit from the left,
-                and so on. Prize brackets don't stack — only the highest match
-                counts.
+                &quot;Match first 1&quot; means matching the first digit from
+                the left, and so on. Prize brackets don&apos;t stack — only the
+                highest match counts.
               </div>
             </div>
           )}
