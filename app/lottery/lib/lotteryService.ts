@@ -2,6 +2,15 @@
 
 import { toast } from "sonner";
 
+export const prizeAllocation = [
+  { name: "Matches all 6", percentage: "40%" },
+  { name: "Matches first 5", percentage: "20%" },
+  { name: "Burn Pool", percentage: "20%" },
+  { name: "Matches first 4", percentage: "10%" },
+  { name: "Matches first 3", percentage: "5%" },
+  { name: "Matches first 2", percentage: "3%" },
+  { name: "Matches first 1", percentage: "2%" },
+];
 // Types for lottery state
 export type LotteryStatus = "Pending" | "Open" | "Close" | "Claimable";
 

@@ -129,7 +129,7 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#272335] border-0 text-white max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <DialogContent className=" border max-w-md w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <DialogTitle className="text-white text-2xl font-bold">

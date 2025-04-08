@@ -9,7 +9,7 @@ import PrizeFunds from "./components/PrizeFunds";
 
 export default function Lottery() {
   return (
-    <div className="min-h-screen bg-primary py-8 px-4 lg:px-8">
+    <div className="min-h-screen  py-8 px-4 lg:px-8">
      
       <div className="max-w-5xl mx-auto space-y-16">
         <LotteryHeader />
