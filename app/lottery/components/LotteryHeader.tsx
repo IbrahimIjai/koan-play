@@ -4,11 +4,9 @@ import { useState } from "react";
 import TicketModal from "./TicketModal";
 import ConnectButton from "@/components/connect-button";
 import { Button } from "@/components/ui/button";
-import { useAccount } from "wagmi";
 
 export default function LotteryHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isConnected } = useAccount();
   const prizePot = "$36,636";
   // Sparkle animation components
   const Sparkle = ({ className = "" }: { className?: string }) => (
@@ -33,13 +31,13 @@ export default function LotteryHeader() {
       <div className="text-yellow-300 text-2xl font-bold">{prizePot}</div>
 
       <div className="mt-8">
-          <Button
-            onClick={handleBuyTickets}
-            className="transition-all duration-200"
-          >
-            Buy Tickets
-          </Button>
-        </div>
+        <Button
+          onClick={handleBuyTickets}
+          className="transition-all duration-200"
+        >
+          Buy Tickets
+        </Button>
+      </div>
 
       {/* Ticket Modal */}
       <TicketModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

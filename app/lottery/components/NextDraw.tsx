@@ -22,12 +22,6 @@ interface PrizeAllocation {
   percentage: string;
 }
 
-interface LotteryPrizeDisplayProps {
-  totalPrizeValue: number;
-  totalPrizeCake: number;
-  cakePrice: number;
-}
-
 export default function NextDraw() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
