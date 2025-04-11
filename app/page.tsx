@@ -3,13 +3,10 @@
 import { useAddFrame } from "@/hooks/useAddFrame";
 import { useOpenUrl } from "@/hooks/useOpenUrl";
 import { useMiniKit } from "@/hooks/useMiniKit";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNotification } from "@/hooks/useNotification";
 import { Button } from "@/components/ui/button";
 import ConnectButton from "@/components/connect-button";
-
-// const SCHEMA_UID =
-//   "0x7889a09fb295b0a0c63a3d7903c4f00f7896cca4fa64d2c1313f8547390b7d39";
 
 export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();
@@ -17,6 +14,12 @@ export default function App() {
   console.log({ frameAdded });
   const addFrame = useAddFrame();
   const openUrl = useOpenUrl();
+
+  useEffect(() => {
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [setFrameReady, isFrameReady]);
 
   const sendNotification = useNotification();
 
@@ -27,19 +30,41 @@ export default function App() {
     });
   };
 
-  const handleAddFrame = async () => {
-    const result = await addFrame();
-    if (result) {
-      console.log("Frame added:", result.url, result.token);
-      setFrameAdded(true);
+  const handleAddFrame = useCallback(async () => {
+    const frameAdded = await addFrame();
+    setFrameAdded(Boolean(frameAdded));
+  }, [addFrame]);
+
+  const saveFrameButton = useMemo(() => {
+    if (context && !context.client.added) {
+      return (
+        <Button
+          size="sm"
+          onClick={handleAddFrame}
+          className="text-[var(--app-accent)] p-4"
+          // icon={<Icon name="plus" size="sm" />}
+        >
+          Save Frame
+        </Button>
+      );
     }
-  };
+
+    if (frameAdded) {
+      return (
+        <div className="flex items-center space-x-1 text-sm font-medium text-[#0052FF] animate-fade-out">
+          <span>Saved</span>
+        </div>
+      );
+    }
+
+    return null;
+  }, [context, frameAdded, handleAddFrame]);
 
   console.log({ setFrameReady, isFrameReady, context });
   return (
-    <div className="">
+    <div className="flex flex-wrap py-8">
       <Button onClick={handleSendNotification}>Send Notifications</Button>
-      <Button onClick={handleAddFrame}>Add frame</Button>
+      <Button>{saveFrameButton}</Button>
       <Button onClick={() => openUrl("https://x.com/koanprotocol")}>
         Open X(Twiiter)
       </Button>
