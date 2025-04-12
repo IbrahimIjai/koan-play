@@ -38,7 +38,7 @@ export function CountdownMain() {
     queryFn: async () => {
       if (!userFid) return null;
       try {
-        const response = await axios.get(`/api/get-user?fid=${userFid}`);
+        const response = await axios.get(`/api/store-user?fid=${userFid}`);
         return response.data.success ? response.data.data : null;
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -260,6 +260,11 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
     };
 
     mutation.mutate(userData);
+
+    sendNotification({
+      title: "Early Access Granted!",
+      body: `Welcome ${context.user.username}! You've unlocked early access benefits.`,
+    });
   };
 
   return (
