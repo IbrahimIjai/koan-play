@@ -30,7 +30,7 @@ const modal = createAppKit({
   metadata: metadata,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
-    socials: ["farcaster", "google"],
+    socials: ["farcaster", "google",],
   },
 });
 
