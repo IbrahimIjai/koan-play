@@ -1,42 +1,40 @@
-import { redis } from "@/lib/redis";
+import { Redis } from "@upstash/redis";
 
-
-// Define the UserContext type
-type UserContext = {
-  fid: number;
-  username?: string;
-  displayName?: string;
-  pfpUrl?: string;
-  location?: string; // AccountLocation type
-};
+// Initialize Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL || "",
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
+});
 
 // Define the full user data type that will be stored
-type UserData = UserContext & {
-  token?: string | null;
-  actions?: {
-    followX: boolean;
-    joinTelegram: boolean;
-    followChannel?: boolean;
-    addFrame: boolean;
-  };
-  timestamp: string;
-};
+// interface UserData {
+//   fid: number;
+//   username?: string;
+//   displayName?: string;
+//   pfpUrl?: string;
+//   location?: any;
+//   token?: string | null;
+//   actions?: {
+//     followX: boolean;
+//     joinTelegram: boolean;
+//     followChannel?: boolean;
+//     addFrame: boolean;
+//   };
+//   timestamp: string;
+// }
 
 export async function POST(request: Request) {
   try {
-    const data = (await request.json()) as UserData;
+    const data = await request.json();
 
     // Ensure FID is a number
     const fid =
       typeof data.fid === "string" ? Number.parseInt(data.fid, 10) : data.fid;
 
     if (isNaN(fid)) {
-      return new Response(
-        JSON.stringify({ success: false, error: "Invalid FID" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
+      return Response.json(
+        { success: false, error: "Invalid FID" },
+        { status: 400 },
       );
     }
 
@@ -50,18 +48,12 @@ export async function POST(request: Request) {
     // Add user to a list of early access users
     await redis.sadd("early_access_users", fid.toString());
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json({ success: true });
   } catch (error) {
     console.error("Error storing user data:", error);
-    return new Response(
-      JSON.stringify({ success: false, error: "Failed to store user data" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+    return Response.json(
+      { success: false, error: "Failed to store user data" },
+      { status: 500 },
     );
   }
 }
