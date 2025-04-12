@@ -76,6 +76,7 @@ export async function POST(request: Request) {
     const existingUser = await redis.hgetall(`user:${fid}`);
 
     console.log({existingUser})
+    
     if (existingUser && Object.keys(existingUser).length > 0) {
       return Response.json(
         {
