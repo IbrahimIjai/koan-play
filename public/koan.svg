@@ -1,7 +1,0 @@
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Blue background circle -->
-  <circle cx="100" cy="100" r="90" fill="#0F1429" />
-  
-  <!-- White K letter -->
-  <path d="M70 50 L70 150 M70 100 L130 50 M70 100 L130 150" stroke="white" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-</svg>
