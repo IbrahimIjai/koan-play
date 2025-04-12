@@ -63,6 +63,8 @@ export async function POST(request: Request) {
     const fid =
       typeof data.fid === "string" ? Number.parseInt(data.fid, 10) : data.fid;
 
+      console.log({fid})
+
     if (isNaN(fid)) {
       return Response.json(
         { success: false, error: "Invalid FID" },
@@ -72,6 +74,8 @@ export async function POST(request: Request) {
 
     // Check if user already exists
     const existingUser = await redis.hgetall(`user:${fid}`);
+
+    console.log({existingUser})
     if (existingUser && Object.keys(existingUser).length > 0) {
       return Response.json(
         {

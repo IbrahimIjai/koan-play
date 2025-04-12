@@ -47,7 +47,7 @@ export default async function RootLayout({
       <body className="">
         <Providers cookies={cookies}>
           {children}
-          <Toaster />
+          <Toaster position="top-right" />
         </Providers>
       </body>
     </html>
