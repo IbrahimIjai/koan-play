@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@coinbase/onchainkit": "latest",
+    "@farcaster/frame-sdk": "^0.0.34",
     "@number-flow/react": "^0.5.9",
     "@radix-ui/react-dialog": "^1.1.7",
     "@radix-ui/react-separator": "^1.1.3",
