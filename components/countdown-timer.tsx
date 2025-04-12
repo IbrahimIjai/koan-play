@@ -1,96 +1,91 @@
-"use client";
+// components/Countdown.tsx
+import { useEffect, useState } from "react";
+import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-
-interface CountdownTimerProps {
-  launchDate: string;
+interface CountdownProps {
+  targetUnixTimestamp: number;
+  className?: string;
 }
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-export default function CountdownTimer({ launchDate }: CountdownTimerProps) {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+export default function Countdown({
+  targetUnixTimestamp,
+  className = "",
+}: CountdownProps) {
+  // Track remaining time in seconds
+  const [timeUnits, setTimeUnits] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
 
+  // Prevent unnecessary re-renders by calculating outside useEffect
+  const calculateTimeUnits = (remainingSeconds: number) => {
+    const days = Math.floor(remainingSeconds / 86400);
+    const hours = Math.floor((remainingSeconds % 86400) / 3600);
+    const minutes = Math.floor((remainingSeconds % 3600) / 60);
+    const seconds = remainingSeconds % 60;
+
+    return { days, hours, minutes, seconds };
+  };
+
+  // Update the countdown timer every second
   useEffect(() => {
-    const target = new Date(launchDate).getTime();
+    // Only run if we have a valid timestamp
+    if (!targetUnixTimestamp) return;
 
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const difference = target - now;
+    const calculateRemainingTime = () => {
+      const now = Math.floor(Date.now() / 1000); // Current time in seconds
+      const difference = Math.max(0, targetUnixTimestamp - now);
 
-      if (difference <= 0) {
-        return {
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        };
-      }
-
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        ),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((difference % (1000 * 60)) / 1000),
-      };
+      setTimeUnits(calculateTimeUnits(difference));
     };
 
-    setTimeLeft(calculateTimeLeft());
+    // Calculate immediately on mount
+    calculateRemainingTime();
 
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    // Set up interval to update the time every second
+    const interval = setInterval(calculateRemainingTime, 1000);
 
-    return () => clearInterval(timer);
-  }, [launchDate]);
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
+  }, [targetUnixTimestamp]);
+
+  // Labels for time units
+  const timeLabels = ["DAYS", "HOURS", "MINS", "SECS"];
+  const timeValues = [
+    timeUnits.days,
+    timeUnits.hours,
+    timeUnits.minutes,
+    timeUnits.seconds,
+  ];
 
   return (
-    <div className="flex flex-col items-center justify-center pointer-events-auto">
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        <TimeUnit value={timeLeft.days} label="DAYS" />
-        <TimeUnit value={timeLeft.hours} label="HOURS" />
-        <TimeUnit value={timeLeft.minutes} label="MINUTES" />
-        <TimeUnit value={timeLeft.seconds} label="SECONDS" />
-      </div>
-      <Button
-        className="bg-white text-black hover:bg-white/90 font-semibold px-8 py-6 text-lg"
-        onClick={() => window.open("https://example.com/learn-more", "_blank")}
-      >
-        LEARN MORE
-      </Button>
-    </div>
-  );
-}
-
-interface TimeUnitProps {
-  value: number;
-  label: string;
-}
-
-function TimeUnit({ value, label }: TimeUnitProps) {
-  return (
-    <div className="flex flex-col items-center">
-      <div className="bg-black/70 backdrop-blur-sm border border-white/30 rounded-lg w-20 h-20 flex items-center justify-center mb-2">
-        <span className="text-white text-3xl font-bold">
-          {value.toString().padStart(2, "0")}
-        </span>
-      </div>
-      <span className="text-white text-xs font-semibold tracking-wider">
-        {label}
-      </span>
+    <div className={`${className}`}>
+      <NumberFlowGroup>
+        <div className="flex items-center justify-center gap-3">
+          {timeLabels.map((label, index) => (
+            <div key={label} className="flex flex-col items-center">
+              <div className="px-3 py-2 rounded-lg bg-slate-800/90 border border-indigo-500/20 shadow-md">
+                <div className="text-3xl font-bold number-flow-container">
+                  <NumberFlow
+                    trend={-1}
+                    value={timeValues[index]}
+                    format={{ minimumIntegerDigits: 2 }}
+                    // Apply different digit settings for different time units
+                    digits={
+                      index === 2 || index === 3 ? { 1: { max: 5 } } : undefined
+                    }
+                  />
+                </div>
+              </div>
+              <span className="mt-1 text-xs font-medium text-slate-400">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </NumberFlowGroup>
     </div>
   );
 }
