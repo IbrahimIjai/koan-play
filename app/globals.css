@@ -94,3 +94,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+.number-flow-container {
+  font-variant-numeric: tabular-nums;
+  --number-flow-char-height: 0.85em;
+}
