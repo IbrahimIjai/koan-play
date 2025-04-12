@@ -26,7 +26,12 @@ export default function Countdown() {
   const addFrame = useAddFrame();
   const openUrl = useOpenUrl();
   const sendNotification = useNotification();
-
+  const [actions, setActions] = useState({
+    followX: false,
+    joinTelegram: false,
+    followChannel: false,
+    addFrame: false,
+  });
   const [frameToken, setFrameToken] = useState<string | null>(null);
 
   const handleAddFrame = async () => {
@@ -36,39 +41,54 @@ export default function Countdown() {
     }
   };
 
-   const handleDone = async () => {
-     if (!context?.user) return;
+  const handleDone = async () => {
+    if (!context) {
+      console.log("NOooo web");
+      toast.error("Tasks not completed", {
+        description:
+          "Completeall tasks to be paticipate in the early birds rewards",
+      });
+      return;
+    } else if (
+      context &&
+      (!context.client.added || !actions.followX || !actions.joinTelegram)
+    ) {
+      toast.error("Tasks not completed", {
+        description:
+          "Completeall tasks to be paticipate in the early birds rewards",
+      });
+      return;
+    }
 
-     const userData = {
-       fid: context.user.fid,
-       username: context.user.username,
-       displayName: context.user.displayName,
-       pfpUrl: context.user.pfpUrl,
-       location: context.user.location,
-       token: frameToken,
-       timestamp: new Date().toISOString(),
-     };
+    const userData = {
+      fid: context.user.fid,
+      username: context.user.username,
+      displayName: context.user.displayName,
+      pfpUrl: context.user.pfpUrl,
+      location: context.user.location,
+      token: frameToken,
+      timestamp: new Date().toISOString(),
+    };
 
-     try {
-       // Store user data in Redis
-       await fetch("/api/store-user", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify(userData),
-       });
+    try {
+      // Store user data in Redis
+      await fetch("/api/store-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
 
-       // Send notification
-       if (frameToken) {
-         sendNotification({
-           title: "Early Access Granted!",
-           body: `Welcome ${context.user.username}! You've unlocked early access benefits.`,
-         });
-       }
-     } catch (error) {
-       console.error("Error storing user data:", error);
-     }
-   };
-
+      // Send notification
+      if (frameToken) {
+        sendNotification({
+          title: "Early Access Granted!",
+          body: `Welcome ${context.user.username}! You've unlocked early access benefits.`,
+        });
+      }
+    } catch (error) {
+      console.error("Error storing user data:", error);
+    }
+  };
 
   // Set the target end date (3 days from now)
   const [targetDate] = useState(() => {
@@ -111,64 +131,26 @@ export default function Countdown() {
   // Labels for time units
   const timeLabels = ["DAYS", "HOURS", "MINS", "SECS"];
 
-  const [actions, setActions] = useState({
-    followX: false,
-    joinTelegram: false,
-    followChannel: false,
-    addFrame: false,
-  });
-
   const handleAction = async (action: keyof typeof actions) => {
     setActions((prev) => ({ ...prev, [action]: true }));
 
     // Here we would typically open the respective platform in a new tab
     // or trigger the appropriate action
-     switch (action) {
-       case "followX":
-         openUrl("https://x.com/koanprotocol");
-         setActions((prev) => ({ ...prev, followX: true }));
-         break;
-       case "joinTelegram":
-         openUrl("https://t.me/koanprotocol");
-         setActions((prev) => ({ ...prev, joinTelegram: true }));
+    switch (action) {
+      case "followX":
+        openUrl("https://x.com/koanprotocol");
+        setActions((prev) => ({ ...prev, followX: true }));
+        break;
+      case "joinTelegram":
+        openUrl("https://t.me/koanprotocol");
+        setActions((prev) => ({ ...prev, joinTelegram: true }));
 
-         break;
-       case "addFrame":
-         // This would use the Warpcast frame functionality
-         // For now we'll just mark it as completed
-         break;
-     }
+        break;
+      case "addFrame":
+        handleAddFrame();
+        break;
+    }
   };
-
-  // const handleDone = async () => {
-  //   try {
-  //     const response = await fetch("/api/store-user", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         actions,
-  //         timestamp: new Date().toISOString(),
-  //         // We would include user details here if available
-  //         // userId: context?.fid || 'anonymous',
-  //       }),
-  //     });
-
-  //     if (response.ok) {
-  //       toast.success("Success!", {
-  //         description: "Your early access benefits have been activated.",
-  //       });
-  //     } else {
-  //       throw new Error("Failed to store user data");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error storing user data:", error);
-  //     toast.error("Error", {
-  //       description: "Failed to activate benefits. Please try again.",
-  //     });
-  //   }
-  // };
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -179,9 +161,9 @@ export default function Countdown() {
         transition={{ duration: 0.6 }}
         className="mb-4 text-center"
       >
-        <h1 className="text-lg font-bold">Koan Play Lottery</h1>
-        <p className="text-sm text-muted-foreground mt-2">
-          Experience lottery right on chain in:
+        <h1 className="text-xl font-bold">Koan Play Lottery</h1>
+        <p className="text-sm text-muted-foreground">
+          Get early access to exclusive benefits
         </p>
       </motion.div>
 
@@ -286,6 +268,7 @@ export default function Countdown() {
             <div className="p-4 space-y-4">
               {/* Follow X Button */}
               <Button
+                disabled={actions.followX}
                 variant="outline"
                 className="w-full justify-start gap-3 border-2 bg-transparent"
                 onClick={() => handleAction("followX")}
@@ -302,6 +285,7 @@ export default function Countdown() {
               {/* Join Telegram Button */}
               <Button
                 variant="outline"
+                disabled={actions.joinTelegram}
                 className="w-full justify-start gap-3 border-2 bg-transparent"
                 onClick={() => handleAction("joinTelegram")}
               >
@@ -317,6 +301,7 @@ export default function Countdown() {
               {/* Add Frame Button */}
               <Button
                 variant="outline"
+                disabled={!!(context && !context.client.added)}
                 className="w-full justify-start gap-3 border-2 bg-transparent"
                 onClick={() => handleAction("addFrame")}
               >
@@ -378,19 +363,19 @@ function TelegramLogo() {
   );
 }
 
-function ChannelIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+// function ChannelIcon() {
+//   return (
+//     <svg
+//       width="20"
+//       height="20"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <path
+//         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"
+//         fill="currentColor"
+//       />
+//     </svg>
+//   );
+// }
