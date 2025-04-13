@@ -1,6 +1,11 @@
 import type { FrameNotificationDetails } from "@farcaster/frame-sdk";
-import { redis } from "./redis";
+// import { redis } from "./redis";
+import { Redis } from "@upstash/redis";
 
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 const notificationServiceKey =
   process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME ?? "minikit";
 

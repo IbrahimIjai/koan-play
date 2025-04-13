@@ -1,6 +1,8 @@
 import { cookieStorage, createStorage } from "@wagmi/core";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { base, baseSepolia } from "@reown/appkit/networks";
+import { farcasterFrame as miniAppConnector } from "@farcaster/frame-wagmi-connector";
+
 // import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
 export const projectId = "926aea17b9e7bceeaff476f56a0d1d95";
 
@@ -14,6 +16,7 @@ export const wagmiAdapter = new WagmiAdapter({
   ssr: true,
   projectId,
   networks,
+  connectors: [miniAppConnector()],
 });
 
 export const config = wagmiAdapter.wagmiConfig;
