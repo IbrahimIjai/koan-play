@@ -42,7 +42,8 @@
     "vaul": "^1.1.2",
     "viem": "^2.26.3",
     "vitest": "^3.1.1",
-    "wagmi": "^2.14.16"
+    "wagmi": "^2.14.16",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",

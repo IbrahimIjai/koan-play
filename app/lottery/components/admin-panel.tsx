@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useAccount,
   useReadContract,
@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Address, formatEther, parseEther } from "viem";
+import { Address, formatEther, parseEther, parseUnits } from "viem";
 import {
   Card,
   CardContent,
@@ -33,6 +33,7 @@ import { baseSepolia } from "viem/chains";
 import { LOTTERY_ABI, RANDOMNUMBER_GENERATOR_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
 import { Switch } from "@/components/ui/switch";
+import { getTokenByAddress } from "@/configs/token-list";
 
 export default function AdminPanel() {
   const { address, isConnected } = useAccount();
@@ -48,6 +49,11 @@ export default function AdminPanel() {
   const [treasuryAddress, setTreasuryAddress] = useState("");
   const [injectorAddress, setInjectorAddress] = useState("");
   const [autoInjection, setAutoInjection] = useState(true);
+  const [paymentTokenInfo, setPaymentTokenInfo] = useState<{
+    address: string;
+    decimals: number;
+    symbol: string;
+  } | null>(null);
 
   const { data: currentLotteryId } = useReadContract({
     address: CONTRACTS.LOTTERY.address[baseSepolia.id],
@@ -134,13 +140,21 @@ export default function AdminPanel() {
       return;
     }
 
+    // Use the token's decimals for parsing the price
+    const decimals = paymentTokenInfo?.decimals || 18;
+    const priceTicketInTokenUnits = parseUnits(
+      startLotteryParams.priceTicket,
+      decimals,
+    );
+    console.log({ priceTicket: startLotteryParams.priceTicket });
+
     startLottery({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
       abi: LOTTERY_ABI,
       functionName: "startLottery",
       args: [
         BigInt(endTimeSeconds),
-        parseEther(startLotteryParams.priceTicket),
+        priceTicketInTokenUnits,
         BigInt(startLotteryParams.discountDivisor),
         startLotteryParams.rewardsBreakdown.map((r) => BigInt(r)),
         BigInt(startLotteryParams.treasuryFee),
@@ -158,6 +172,36 @@ export default function AdminPanel() {
       args: [currentLotteryId],
     });
   };
+
+  const { data: paymentTokenAddress } = useReadContract({
+    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    abi: LOTTERY_ABI,
+    functionName: "paymentToken",
+  });
+
+  // Get payment token info
+  useEffect(() => {
+    if (paymentTokenAddress) {
+      const tokenInfo = getTokenByAddress(
+        baseSepolia.id,
+        paymentTokenAddress as string,
+      );
+      if (tokenInfo) {
+        setPaymentTokenInfo({
+          address: tokenInfo.address,
+          decimals: tokenInfo.decimals,
+          symbol: tokenInfo.symbol,
+        });
+      } else {
+        // If token not in our list, use default values
+        setPaymentTokenInfo({
+          address: paymentTokenAddress as string,
+          decimals: 18, // Default to 18 decimals
+          symbol: "TOKEN", // Generic symbol
+        });
+      }
+    }
+  }, [paymentTokenAddress]);
 
   const handleDrawFinalNumber = () => {
     if (!currentLotteryId) return;
@@ -177,7 +221,7 @@ export default function AdminPanel() {
       address: CONTRACTS.RANDOM_NUMBER_GENERATOR.address[baseSepolia.id],
       abi: RANDOMNUMBER_GENERATOR_ABI,
       functionName: "setKeyHash",
-      args: [keyHash],
+      args: [keyHash as Address],
     });
   };
 
