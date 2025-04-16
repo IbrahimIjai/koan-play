@@ -7,16 +7,9 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
-import {
-  AlertCircle,
-  RefreshCw,
-  Clock,
-  Trophy,
-  DollarSign,
-} from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { RefreshCw, Clock, Trophy, DollarSign } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Address, formatEther, parseEther, parseUnits } from "viem";
+import { Address, formatEther, formatUnits, parseUnits } from "viem";
 import {
   Card,
   CardContent,
@@ -36,10 +29,9 @@ import { Switch } from "@/components/ui/switch";
 import { getTokenByAddress } from "@/configs/token-list";
 
 export default function AdminPanel() {
-  const { address, isConnected } = useAccount();
   const [startLotteryParams, setStartLotteryParams] = useState({
     endTime: "",
-    priceTicket: "0.01",
+    priceTicket: "0.1",
     discountDivisor: "500",
     rewardsBreakdown: [250, 375, 625, 1250, 2500, 5000],
     treasuryFee: "2000",
@@ -166,8 +158,8 @@ export default function AdminPanel() {
     if (!currentLotteryId) return;
 
     closeLottery({
-      address: LOTTERY_CONTRACT_ADDRESS,
-      abi: lotteryAbi,
+      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      abi: LOTTERY_ABI,
       functionName: "closeLottery",
       args: [currentLotteryId],
     });
@@ -288,8 +280,11 @@ export default function AdminPanel() {
                       <h3 className="text-sm font-medium">Prize Pool</h3>
                     </div>
                     <p className="text-2xl font-bold">
-                      {formatEther(lotteryInfo.amountCollectedInPaymentToken)}{" "}
-                      ETH
+                      {formatUnits(
+                        lotteryInfo.amountCollectedInPaymentToken,
+                        paymentTokenInfo?.decimals ?? 6,
+                      )}{" "}
+                      {paymentTokenInfo?.symbol}
                     </p>
                   </div>
 

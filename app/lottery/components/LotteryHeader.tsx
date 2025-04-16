@@ -8,7 +8,7 @@ import {
   // useWaitForTransactionReceipt,
   // useWriteContract,
 } from "wagmi";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 // erc20Abi,
 import { format } from "date-fns";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -61,12 +61,12 @@ export default function LotteryHeader() {
     },
   });
 
-  const { data: userTickets, isLoading: isLoadingUserTickets } =
+  const { data: userTickets, isLoading: isLoadingUserTickets, refetch: refetchUserLotteryInfo } =
     useReadContract({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
       abi: LOTTERY_ABI,
       functionName: "viewUserInfoForLotteryId",
-      args: [address || "0x0", currentLotteryId || 0n, 0n, 5n],
+      args: [address || "0x0", currentLotteryId || 0n, 0n, 100n],
       query: {
         enabled: isConnected && currentLotteryId !== undefined,
       },
@@ -116,12 +116,16 @@ export default function LotteryHeader() {
     userTickets && userTickets[0] ? userTickets[0].length : 0;
 
   // Format prize pool
+  // const prizePool = lotteryInfo
+  //   ? Number(
+  //       formatEther(lotteryInfo.amountCollectedInPaymentToken),
+  //     ).toLocaleString(undefined, {
+  //       maximumFractionDigits: 2,
+  //     })
+  //   : "0.00";
+
   const prizePool = lotteryInfo
-    ? Number(
-        formatEther(lotteryInfo.amountCollectedInPaymentToken),
-      ).toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-      })
+    ? formatUnits(lotteryInfo.amountCollectedInPaymentToken, tokenDecimals)
     : "0.00";
 
   return (
@@ -143,7 +147,7 @@ export default function LotteryHeader() {
               <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
                 Prize Pot
               </span>
-              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-3/4" />
             </div>
 
             <div className="flex flex-col items-center">
@@ -208,6 +212,7 @@ export default function LotteryHeader() {
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           buttonClassName="w-4/5 mx-auto"
+          refetchUserLotteryInfo={refetchUserLotteryInfo}
           buttonText={
             lotteryInfo && lotteryInfo.status === 1
               ? "Get Tickets"

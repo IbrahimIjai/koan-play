@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { headers } from "next/headers"; // added
 import { Toaster } from "@/components/ui/sonner";
+import Header from "@/components/header";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -46,6 +47,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="">
         <Providers cookies={cookies}>
+          <Header/>
           {children}
           <Toaster position="top-right" />
         </Providers>
