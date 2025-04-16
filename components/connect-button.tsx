@@ -1,3 +1,5 @@
+"use client"
+
 import { useAccount } from "wagmi";
 import { ConnectChecker } from "./checkers/connect";
 import { shortenAddress } from "@/lib/utils";

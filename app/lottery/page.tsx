@@ -1,23 +1,21 @@
-"use client";
 
+
+import ConnectButton from "@/components/connect-button";
+import CheckWinningsButton from "./components/check-winings";
 import LotteryHeader from "./components/LotteryHeader";
-import NextDraw from "./components/NextDraw";
-import FinishedRounds from "./components/FinishedRounds";
-import HowToPlay from "./components/HowToPlay";
-import ConnectWalletSection from "./components/ConnectWalletSection";
-import PrizeFunds from "./components/PrizeFunds";
 
 export default function Lottery() {
+  // const { connectors } = useConnect();
+
+  // console.log({ connectors });
+
   return (
     <div className="min-h-screen  py-8 px-4 lg:px-8">
-     
       <div className="max-w-5xl mx-auto space-y-16">
+      <ConnectButton/>
         <LotteryHeader />
-        <NextDraw />
-        <ConnectWalletSection />
-        <FinishedRounds />
-        <HowToPlay />
-        <PrizeFunds />
+
+        <CheckWinningsButton />
       </div>
     </div>
   );
