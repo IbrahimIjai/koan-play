@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import {
-  useAccount,
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { RefreshCw, Clock, Trophy, DollarSign } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Address, formatEther, formatUnits, parseUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 import {
   Card,
   CardContent,
@@ -138,7 +137,6 @@ export default function AdminPanel() {
       startLotteryParams.priceTicket,
       decimals,
     );
-    console.log({ priceTicket: startLotteryParams.priceTicket });
 
     startLottery({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
@@ -148,7 +146,8 @@ export default function AdminPanel() {
         BigInt(endTimeSeconds),
         priceTicketInTokenUnits,
         BigInt(startLotteryParams.discountDivisor),
-        startLotteryParams.rewardsBreakdown.map((r) => BigInt(r)),
+        //@ts-expect-error: type error by tuple
+        startLotteryParams.rewardsBreakdown.map((r) => BigInt(r)) as bigint[],
         BigInt(startLotteryParams.treasuryFee),
       ],
     });

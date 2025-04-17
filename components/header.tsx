@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
-import MiniAppConnectButton from "./mini-app-connect-button";
+import ConnectButton from "./connect-button";
+import { useMiniKit } from "@/hooks/useMiniKit";
 
 function Header() {
+  const { context } = useMiniKit();
+
+  console.log({ context });
   return (
     <div>
-      <MiniAppConnectButton />
+      <ConnectButton />
     </div>
   );
 }

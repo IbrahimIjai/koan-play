@@ -132,12 +132,10 @@ export default function LotteryHeader() {
     <Card className="overflow-hidden ">
       {/* Round number banner */}
       <div className=" py-2 px-4 flex justify-between items-center border-b">
-        <h2 className="text-white font-bold text-xs text-muted-foreground">
+        <p className="text-white font-bold text-xs text-muted-foreground">
           #{currentLotteryId?.toString() || "..."}
-        </h2>
-        <span className="text-white text-xs font-medium text-muted-foreground">
-          Current Round
-        </span>
+        </p>
+    
       </div>
 
       {isLoading ? (
