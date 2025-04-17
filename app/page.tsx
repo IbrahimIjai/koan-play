@@ -1,11 +1,11 @@
 "use client";
 
-import { useAddFrame } from "@/hooks/useAddFrame";
-import { useMiniKit } from "@/hooks/useMiniKit";
+// import { useAddFrame } from "@/hooks/useAddFrame";
+// import { useMiniKit } from "@/hooks/useMiniKit";
 import { useCallback, useEffect, useState } from "react";
-import {CountdownMain} from "@/components/koan-play-animation";
+import { CountdownMain } from "@/components/koan-play-animation";
 import { motion } from "framer-motion";
-
+import { useMiniKit, useAddFrame } from "@coinbase/onchainkit/minikit";
 
 export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();

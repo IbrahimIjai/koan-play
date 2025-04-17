@@ -3,7 +3,7 @@ import "@coinbase/onchainkit/styles.css";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
-import { headers } from "next/headers"; // added
+// import { headers } from "next/headers"; // added
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/header";
 export const viewport: Viewport = {
@@ -41,12 +41,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const headersObj = await headers();
-    const cookies = headersObj.get("cookie");
+    // const headersObj = await headers();
+    // const cookies = headersObj.get("cookie");
   return (
     <html lang="en">
       <body className="">
-        <Providers cookies={cookies}>
+        <Providers 
+        // cookies={cookies}
+        >
           <Header/>
           {children}
           <Toaster position="top-right" />

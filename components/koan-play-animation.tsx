@@ -14,10 +14,16 @@ import {
 import { Check, Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "./ui/separator";
-import { useMiniKit } from "@/hooks/useMiniKit";
-import { useAddFrame } from "@/hooks/useAddFrame";
-import { useOpenUrl } from "@/hooks/useOpenUrl";
-import { useNotification } from "@/hooks/useNotification";
+// import { useMiniKit } from "@/hooks/useMiniKit";
+// import { useAddFrame } from "@/hooks/useAddFrame";
+import {
+  useMiniKit,
+  useAddFrame,
+  useOpenUrl,
+  useNotification,
+} from "@coinbase/onchainkit/minikit";
+// import { useOpenUrl } from "@/hooks/useOpenUrl";
+// import { useNotification } from "@/hooks/useNotification";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";

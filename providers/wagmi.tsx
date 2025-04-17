@@ -3,7 +3,7 @@
 import { wagmiAdapter, projectId } from "@/configs/reown";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createAppKit } from "@reown/appkit/react";
-import { base, baseSepolia } from "@reown/appkit/networks";
+import { base } from "@reown/appkit/networks";
 import React, { useMemo, type ReactNode } from "react";
 import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 import { useProviderDependencies } from "@/hooks/useProviderDependencies";
@@ -25,7 +25,7 @@ const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
   showWallets: false,
-  networks: [base,baseSepolia],
+  networks: [base],
   defaultNetwork: base,
   metadata: metadata
 });

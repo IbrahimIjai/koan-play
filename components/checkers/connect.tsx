@@ -5,14 +5,19 @@ import { FC } from "react";
 import { useAccount, useConnect } from "wagmi";
 
 import { useIsMounted } from "@/hooks/useIsMounted";
-import { useAppKit } from "@reown/appkit/react";
-import { useMiniKit } from "@/hooks/useMiniKit";
+// import { useAppKit } from "@reown/appkit/react";
+// import { useMiniKit } from "@/hooks/useMiniKit";
+import {
+  useMiniKit,
+  // useAddFrame,
+  // useOpenUrl,
+} from "@coinbase/onchainkit/minikit";
 import { farcasterFrame as miniAppConnector } from "@farcaster/frame-wagmi-connector";
 
 const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const isMounted = useIsMounted();
   const { context } = useMiniKit();
-  const { open } = useAppKit();
+  // const { open } = useAppKit();
   const { isDisconnected, isConnecting } = useAccount();
   const { connect } = useConnect();
 
@@ -35,7 +40,7 @@ const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
           </Button>
         ) : (
           <Button
-            onClick={() => open({ view: "Connect" })}
+            // onClick={() => open({ view: "Connect" })}
             className="shadow-2xl"
           >
             Connect Wallet
