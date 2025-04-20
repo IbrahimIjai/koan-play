@@ -32,7 +32,7 @@ import Countdown from "./countdown-timer";
 export function CountdownMain() {
   const { context } = useMiniKit();
   const [launchTimestamp] = useState(() => {
-    return 1744823628;
+    return 1745488818;
   });
 
   // Get user's FID
@@ -313,7 +313,7 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
               <Button
                 disabled={actions.followX}
                 variant="outline"
-                className="w-full justify-start gap-3 border-2 bg-transparent hover:bg-indigo-50 hover:border-indigo-300 transition-colors"
+                className="w-full transition-colors"
                 onClick={() => handleAction("followX")}
               >
                 <div className="flex items-center gap-3">
@@ -331,7 +331,7 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
               <Button
                 variant="outline"
                 disabled={actions.joinTelegram}
-                className="w-full justify-start gap-3 border-2 bg-transparent hover:bg-indigo-50 hover:border-indigo-300 transition-colors"
+                className="w-full transition-colors"
                 onClick={() => handleAction("joinTelegram")}
               >
                 <div className="flex items-center gap-3">
@@ -349,7 +349,7 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
               <Button
                 variant="outline"
                 disabled={!!(context && context.client.added)}
-                className="w-full justify-start gap-3 border-2 bg-transparent hover:bg-indigo-50 hover:border-indigo-300 transition-colors"
+                className="w-full transition-colors"
                 onClick={() => handleAction("addFrame")}
               >
                 <div className="flex items-center gap-3">
@@ -368,7 +368,7 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
               <Button
                 onClick={handleDone}
                 disabled={mutation.isPending}
-                className="relative bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
+                className="relative "
               >
                 {mutation.isPending ? (
                   <>

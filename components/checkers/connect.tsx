@@ -13,6 +13,7 @@ import {
   // useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
 import { farcasterFrame as miniAppConnector } from "@farcaster/frame-wagmi-connector";
+import { metaMask } from "wagmi/connectors";
 
 const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const isMounted = useIsMounted();
@@ -40,7 +41,7 @@ const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
           </Button>
         ) : (
           <Button
-            // onClick={() => open({ view: "Connect" })}
+            onClick={() => connect({ connector: metaMask() })}
             className="shadow-2xl"
           >
             Connect Wallet

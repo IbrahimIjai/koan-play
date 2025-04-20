@@ -1,7 +1,5 @@
 "use client";
 
-// import { useAddFrame } from "@/hooks/useAddFrame";
-// import { useMiniKit } from "@/hooks/useMiniKit";
 import { useCallback, useEffect, useState } from "react";
 import { CountdownMain } from "@/components/koan-play-animation";
 import { motion } from "framer-motion";

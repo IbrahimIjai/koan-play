@@ -66,8 +66,8 @@ export default function Countdown({
         <div className="flex items-center justify-center gap-3">
           {timeLabels.map((label, index) => (
             <div key={label} className="flex flex-col items-center">
-              <div className="px-3 py-2 rounded-lg bg-slate-800/90 border border-indigo-500/20 shadow-md">
-                <div className="text-3xl font-bold number-flow-container">
+              <div className="px-3 py-2 rounded-lg bg-background/80 border shadow-md">
+                <div className="text-xl font-bold number-flow-container">
                   <NumberFlow
                     trend={-1}
                     value={timeValues[index]}
@@ -79,7 +79,7 @@ export default function Countdown({
                   />
                 </div>
               </div>
-              <span className="mt-1 text-xs font-medium text-slate-400">
+              <span className="mt-1 text-xs font-medium text-muted-foreground  lowercase">
                 {label}
               </span>
             </div>

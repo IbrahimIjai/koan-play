@@ -36,7 +36,8 @@ import BuyTicketDialog from "./buy-ticket-dialog";
 
 export default function LotteryHeader() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
+  console.log({ chainId });
   const {
     data: currentLotteryId,
     isLoading: isLoadingId,
@@ -45,6 +46,7 @@ export default function LotteryHeader() {
     address: CONTRACTS.LOTTERY.address[baseSepolia.id],
     abi: LOTTERY_ABI,
     functionName: "viewCurrentLotteryId",
+    chainId
   });
 
   const {
@@ -56,21 +58,26 @@ export default function LotteryHeader() {
     abi: LOTTERY_ABI,
     functionName: "viewLottery",
     args: [currentLotteryId || 0n],
+    chainId,
     query: {
       enabled: currentLotteryId !== undefined,
     },
   });
 
-  const { data: userTickets, isLoading: isLoadingUserTickets, refetch: refetchUserLotteryInfo } =
-    useReadContract({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
-      abi: LOTTERY_ABI,
-      functionName: "viewUserInfoForLotteryId",
-      args: [address || "0x0", currentLotteryId || 0n, 0n, 100n],
-      query: {
-        enabled: isConnected && currentLotteryId !== undefined,
-      },
-    });
+  const {
+    data: userTickets,
+    isLoading: isLoadingUserTickets,
+    refetch: refetchUserLotteryInfo,
+  } = useReadContract({
+    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    abi: LOTTERY_ABI,
+    functionName: "viewUserInfoForLotteryId",
+    args: [address || "0x0", currentLotteryId || 0n, 0n, 100n],
+    chainId,
+    query: {
+      enabled: isConnected && currentLotteryId !== undefined,
+    },
+  });
 
   console.log({ userTickets });
 
@@ -78,6 +85,7 @@ export default function LotteryHeader() {
     address: CONTRACTS.LOTTERY.address[baseSepolia.id],
     abi: LOTTERY_ABI,
     functionName: "paymentToken",
+    chainId,
   });
 
   console.log({ paymentTokenAddress });
@@ -135,7 +143,6 @@ export default function LotteryHeader() {
         <p className="text-white font-bold text-xs text-muted-foreground">
           #{currentLotteryId?.toString() || "..."}
         </p>
-    
       </div>
 
       {isLoading ? (

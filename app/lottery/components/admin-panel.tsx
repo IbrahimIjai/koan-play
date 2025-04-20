@@ -56,7 +56,7 @@ export default function AdminPanel() {
     address: CONTRACTS.LOTTERY.address[baseSepolia.id],
     abi: LOTTERY_ABI,
     functionName: "viewLottery",
-    args: [currentLotteryId || 0n],
+    args: [currentLotteryId || 1n],
     query: {
       enabled: currentLotteryId !== undefined,
     },
