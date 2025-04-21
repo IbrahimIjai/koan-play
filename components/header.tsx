@@ -4,7 +4,8 @@ import React from "react";
 import ConnectButton from "./connect-button";
 // import { useMiniKit } from "@/hooks/useMiniKit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useMiniKit} from "@coinbase/onchainkit/minikit";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import ChainSwitcherDrawer from "./chain-switch drawer";
 function Header() {
   const { context } = useMiniKit();
 
@@ -28,7 +29,10 @@ function Header() {
         </p>
       </div>
 
-      <ConnectButton />
+      <div>
+        <ChainSwitcherDrawer />
+        <ConnectButton />
+      </div>
     </div>
   );
 }
