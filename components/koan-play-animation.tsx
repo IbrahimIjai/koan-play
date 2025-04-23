@@ -32,7 +32,7 @@ import Countdown from "./countdown-timer";
 export function CountdownMain() {
   const { context } = useMiniKit();
   const [launchTimestamp] = useState(() => {
-    return 1745488818;
+    return 1745668800;
   });
 
   // Get user's FID
