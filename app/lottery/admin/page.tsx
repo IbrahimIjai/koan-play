@@ -1,13 +1,12 @@
-
-
 import ConnectButton from "@/components/connect-button";
-import AdminPanel from "../components/admin-panel";
+import { AdminPanelV2 } from "@/components/admin-panel/admin-panel-v2";
 
 export default function LotteryAdmin() {
   return (
     <>
-      <ConnectButton />
-      <AdminPanel />
+      <div className="max-w-6xl mx-auto">
+        <AdminPanelV2 />
+      </div>
     </>
   );
 }

@@ -34,8 +34,8 @@ const createContractConfig = (
 export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
-      [baseSepolia.id]: "0xcC54adAcCB605867390e5f82E6aD0aAD3F05CF00",
-      [base.id]: "0xcC54adAcCB605867390e5f82E6aD0aAD3F05CF00", // Update with mainnet address
+      [baseSepolia.id]: "0xbaaA969ea92Bda4A81CeDae556756081d3fCADE8",
+      [base.id]: "0xbaaA969ea92Bda4A81CeDae556756081d3fCADE8", // Update with mainnet address
     },
     LOTTERY_ABI,
   ),
