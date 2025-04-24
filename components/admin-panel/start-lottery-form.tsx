@@ -26,8 +26,15 @@ import { getTokenByAddress } from "@/configs/token-list";
 import { toast } from "sonner";
 
 export default function StartLotteryForm() {
+  // Calculate default end time (current time + 1 hour + 5 minutes)
+  const getDefaultEndTime = () => {
+    const date = new Date();
+    date.setMinutes(date.getMinutes() + 65);
+    return date.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
+  };
+
   const [startLotteryParams, setStartLotteryParams] = useState({
-    endTime: "",
+    endTime: getDefaultEndTime(),
     priceTicket: "0.1",
     discountDivisor: "500",
     rewardsBreakdown: [250, 375, 625, 1250, 2500, 5000],

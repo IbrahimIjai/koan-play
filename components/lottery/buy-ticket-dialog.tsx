@@ -41,7 +41,7 @@ import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
 interface BuyTicketDialogProps {
   open: boolean;
-  refetchUserLotteryInfo: (
+  refetchUserLotteryInfo?: (
     options?: RefetchOptions,
   ) => Promise<
     QueryObserverResult<
@@ -223,7 +223,7 @@ export default function BuyTicketDialog({
           setPurchasedTickets([]);
           setTicketNumbers("");
           setTicketCount(1);
-          refetchUserLotteryInfo();
+          refetchUserLotteryInfo?.();
         }, 300);
       }
     }

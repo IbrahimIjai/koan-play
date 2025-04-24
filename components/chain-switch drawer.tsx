@@ -17,11 +17,8 @@ import Image from "next/image";
 
 // Chain logo mapping
 const chainLogoMap: Record<number, string> = {
-  1: "/ethereum.svg", // Mainnet
-  11155111: "/sepolia.svg", // Sepolia
-  137: "/polygon.svg", // Polygon
-  10: "/optimism.svg", // Optimism
-  42161: "/arbitrum.svg", // Arbitrum
+  [baseSepolia.id]: "/base.svg", // sepolia
+  [base.id]: "/base.svg", // mainnet
 };
 
 export default function ChainSwitcherDrawer() {
@@ -62,10 +59,7 @@ export default function ChainSwitcherDrawer() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full max-w-xs justify-start gap-2"
-        >
+        <Button variant="outline" className="w-fit gap-2">
           {currentChain && isConnected ? (
             <>
               <div className="relative flex items-center">
@@ -73,15 +67,17 @@ export default function ChainSwitcherDrawer() {
                   <Image
                     src={chainLogoMap[currentChain.id]}
                     alt={currentChain.name}
-                    width={24}
-                    height={24}
+                    width={18}
+                    height={18}
                   />
                 )}
-                <div className="absolute -bottom-1 -right-1">
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <div className="absolute -bottom-0.5 -right-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
                 </div>
               </div>
-              <span>{currentChain.name}</span>
+              <span className="text-xs hidden lg:inline-flex">
+                {currentChain.name}
+              </span>
             </>
           ) : (
             <span>Select Network</span>

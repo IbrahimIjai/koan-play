@@ -35,7 +35,7 @@ export default function LotterySettings() {
     isSuccess: isSetAddressesSuccess,
     reset: resetSetAddresses,
   } = useWriteContract();
-  
+
   const { isLoading: isAddressesLoading, isSuccess: isAddressesSuccess } =
     useWaitForTransactionReceipt({
       hash: setAddressesHash,

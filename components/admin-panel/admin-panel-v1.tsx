@@ -27,7 +27,7 @@ import { CONTRACTS } from "@/configs/contracts-confg";
 import { Switch } from "@/components/ui/switch";
 import { getTokenByAddress } from "@/configs/token-list";
 
-export default function AdminPanel() {
+export default function AdminPanelV1() {
   const [startLotteryParams, setStartLotteryParams] = useState({
     endTime: "",
     priceTicket: "0.1",

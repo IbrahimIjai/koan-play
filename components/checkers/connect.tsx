@@ -6,12 +6,12 @@ import { useAccount, useConnect } from "wagmi";
 
 import { useIsMounted } from "@/hooks/useIsMounted";
 // import { useAppKit } from "@reown/appkit/react";
-// import { useMiniKit } from "@/hooks/useMiniKit";
-import {
-  useMiniKit,
-  // useAddFrame,
-  // useOpenUrl,
-} from "@coinbase/onchainkit/minikit";
+import { useMiniKit } from "@/hooks/useMiniKit";
+// import {
+//   useMiniKit,
+//   // useAddFrame,
+//   // useOpenUrl,
+// } from "@coinbase/onchainkit/minikit";
 import { farcasterFrame as miniAppConnector } from "@farcaster/frame-wagmi-connector";
 import { metaMask } from "wagmi/connectors";
 
@@ -20,7 +20,7 @@ const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const { context } = useMiniKit();
   // const { open } = useAppKit();
   const { isDisconnected, isConnecting } = useAccount();
-  const { connect } = useConnect();
+  const { connect, connectors } = useConnect();
 
   if (!isMounted) return <Button {...props}>Loading...</Button>;
 

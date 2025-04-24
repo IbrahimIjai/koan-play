@@ -1,5 +1,5 @@
 "use client";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LotteryDetails from "./lottery-details";
 import LotterySettings from "./lottery-settings";
@@ -7,7 +7,10 @@ import RandomGeneratorSettings from "./random-generator-settings";
 import StartLotteryForm from "./start-lottery-form";
 
 export function AdminPanelV2() {
+  const { connectors } = useConnect();
   const { isConnected } = useAccount();
+
+  console.log({ connectors });
 
   if (!isConnected) {
     return (
