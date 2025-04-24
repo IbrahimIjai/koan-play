@@ -94,7 +94,7 @@ export default function LotterySettings() {
       setInjectorAddress("");
       resetSetAddresses();
     }
-  }, [isAddressesSuccess, isSetAddressesSuccess]);
+  }, [isAddressesSuccess, isSetAddressesSuccess, resetSetAddresses]);
 
   // Validate Ethereum address
   const isValidAddress = (address: string) => {

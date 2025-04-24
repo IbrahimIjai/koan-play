@@ -103,20 +103,12 @@ export default function LotteryHeader() {
   const userTicketCount =
     userTickets && userTickets[0] ? userTickets[0].length : 0;
 
-
   const prizePool = lotteryInfo
     ? formatUnits(lotteryInfo.amountCollectedInPaymentToken, tokenDecimals)
     : "0.00";
 
   return (
-    <Card className="overflow-hidden ">
-      {/* Round number banner */}
-      <div className=" py-2 px-4 flex justify-between items-center border-b">
-        <p className="text-white font-bold text-xs text-muted-foreground">
-          #{currentLotteryId?.toString() || "..."}
-        </p>
-      </div>
-
+    <>
       {isLoading ? (
         <CardContent className="p-6">
           <div className="space-y-4">
@@ -140,56 +132,26 @@ export default function LotteryHeader() {
         </CardContent>
       ) : (
         <>
-          <CardContent className="p-6 space-y-6">
-            {/* Prize pot */}
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 text-muted-foreground mb-1">
-                <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
-                  Prize Pot
-                </span>
-              </div>
-              <h3 className="text-3xl font-bold text-primary">
-                ${prizePool} {tokenSymbol}
-              </h3>
-            </div>
-
-            {/* Draw time */}
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 text-muted-foreground mb-1">
-                <span className="text-xs font-medium text-muted-foreground">
-                  Draw Time
-                </span>
-              </div>
-              <p className="font-medium">{formattedDrawTime}</p>
-
-              {/* {ADD A COUNT DOWN TIMER COMPONENT} */}
-            </div>
-
-            {isConnected && (
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-muted-foreground mb-1">
-                  <span className="text-xs text-muted-foreground font-medium">
-                    Your Tickets
-                  </span>
-                </div>
-                <p className="font-medium">
-                  {isConnected
-                    ? userTicketCount > 0
-                      ? `You have ${userTicketCount} ticket${userTicketCount !== 1 ? "s" : ""}`
-                      : "You have no tickets yet"
-                    : "Connect wallet to view"}
-                </p>
-              </div>
-            )}
-          </CardContent>
+          {/* Prize pot */}
+          <div className="text-center">
+            <p className="text-xs font-bold whitespace-nowrap">
+              Koan play Prize Pot
+            </p>
+            <h3 className="text-3xl font-bold text-primary">
+              ${prizePool} {tokenSymbol}
+            </h3>
+          </div>
         </>
       )}
-      <CardFooter className="p-6 pt-0">
+      <div className="mx-auto w-fit">
         <BuyTicketDialog
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           buttonClassName="w-4/5 mx-auto"
           refetchUserLotteryInfo={refetchUserLotteryInfo}
+          variant="pulsing"
+          enableTilt={true}
+          tiltDuration="3s"
           buttonText={
             lotteryInfo && lotteryInfo.status === 1
               ? "Get Tickets"
@@ -200,8 +162,7 @@ export default function LotteryHeader() {
                   : "Lottery Finished"
           }
         />
-      </CardFooter>
-      {/* <BuyTicketDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} /> */}
-    </Card>
+      </div>
+    </>
   );
 }

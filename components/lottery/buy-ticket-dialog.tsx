@@ -38,6 +38,8 @@ import ApprovalChecker from "@/components/checkers/approval";
 import ConnectButton from "@/components/connect-button";
 import { toast } from "sonner";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import { PulsatingButton } from "../ui/pulsating-button";
+import { cn } from "@/lib/utils";
 
 interface BuyTicketDialogProps {
   open: boolean;
@@ -57,14 +59,24 @@ interface BuyTicketDialogProps {
   onOpenChange: (open: boolean) => void;
   buttonClassName?: string;
   buttonText?: string;
+  variant?: "default" | "pulsing";
+  pulseColor?: string;
+  pulseDuration?: string;
+  enableTilt?: boolean;
+  tiltDuration?: string;
 }
 
 export default function BuyTicketDialog({
   open,
   onOpenChange,
+  variant = "default",
+  pulseColor,
+  pulseDuration,
   refetchUserLotteryInfo,
   buttonClassName = "",
   buttonText = "Get Tickets",
+  enableTilt = false,
+  tiltDuration = "2s",
 }: BuyTicketDialogProps) {
   const { address, isConnected } = useAccount();
   const [ticketNumbers, setTicketNumbers] = useState<string>("");
@@ -230,16 +242,12 @@ export default function BuyTicketDialog({
   };
 
   // Button to open the dialog
-  const OpenDialogButton = () => (
-    <Button
-      className={buttonClassName}
-      size="lg"
-      onClick={() => onOpenChange(true)}
-      disabled={!isLotteryOpen || !currentLotteryId || currentLotteryId === 0n}
-    >
-      <Ticket className="mr-2 h-5 w-5" />
-      {buttonText}
-      {!isLotteryOpen && currentLotteryId && currentLotteryId > 0n && (
+  const OpenDialogButton = () => {
+    const disabled =
+      !isLotteryOpen || !currentLotteryId || currentLotteryId === 0n;
+    const statusTag = !isLotteryOpen &&
+      currentLotteryId &&
+      currentLotteryId > 0n && (
         <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
           {lotteryInfo?.status === 0
             ? "Preparing"
@@ -249,9 +257,45 @@ export default function BuyTicketDialog({
                 ? "Claimable"
                 : "Unavailable"}
         </span>
-      )}
-    </Button>
-  );
+      );
+
+    // Content inside the button
+    const buttonContent = (
+      <div className="flex items-center gap-2">
+        <Ticket className="mr-2 h-5 w-5" />
+        {buttonText}
+        {statusTag}
+      </div>
+    );
+
+    // Return either a pulsing button or a normal button based on the variant prop
+    if (variant === "pulsing") {
+      return (
+        <PulsatingButton  
+          className={cn(buttonClassName, "size-lg w-fit")}
+          onClick={() => onOpenChange(true)}
+          disabled={disabled}
+          pulseColor={pulseColor}
+          duration={pulseDuration}
+          enableTilt={enableTilt}
+          tiltDuration={tiltDuration}
+        >
+          {buttonContent}
+        </PulsatingButton>
+      );
+    }
+
+    return (
+      <Button
+        className={buttonClassName}
+        size="lg"
+        onClick={() => onOpenChange(true)}
+        disabled={disabled}
+      >
+        {buttonContent}
+      </Button>
+    );
+  };
 
   // Render transaction status UI
   const renderTransactionStatus = () => {

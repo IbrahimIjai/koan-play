@@ -7,7 +7,6 @@
 }
 
 body {
-
   font-family: "Pixelify Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -23,9 +22,6 @@ body {
     text-wrap: balance;
   }
 }
-
-
-
 
 @layer base {
   :root {
@@ -84,8 +80,6 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -95,8 +89,36 @@ body {
   }
 }
 
-
 .number-flow-container {
   font-variant-numeric: tabular-nums;
   --number-flow-char-height: 0.85em;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--pulse-color);
+  }
+  50% {
+    box-shadow: 0 0 0 8px var(--pulse-color);
+  }
+}
+
+.animate-pulse {
+  animation: pulse var(--duration) ease-out infinite;
+}
+
+@keyframes tilt-rotate {
+  0%, 100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(-5deg); /* anticlockwise tilt */
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(5deg); /* clockwise tilt */
+  }
+}
+
+.animate-tilt-rotate {
+  animation: tilt-rotate var(--tilt-duration) ease-in-out infinite;
 }

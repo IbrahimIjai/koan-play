@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardFooter,
 } from "@/components/ui/card";
-import { ChevronDown, Clock, Ticket, Trophy, Loader2 } from "lucide-react";
+import { ChevronDown, Clock, Ticket, Trophy } from "lucide-react";
 import { LOTTERY_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
 import { baseSepolia } from "viem/chains";
@@ -41,7 +41,7 @@ export default function LotteryTicketADSCard() {
     });
 
   // Get payment token address
-  const { data: paymentTokenAddress, isLoading: isTokenAddressLoading } =
+  const { data: paymentTokenAddress} =
     useReadContract({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
       abi: LOTTERY_ABI,
@@ -57,7 +57,7 @@ export default function LotteryTicketADSCard() {
         setTokenDecimals(tokenInfo.decimals);
       }
     }
-  }, [paymentTokenAddress, baseSepolia.id]);
+  }, [paymentTokenAddress]);
 
   const { data: lotteryInfo, isLoading: isLotteryInfoLoading } =
     useReadContract({

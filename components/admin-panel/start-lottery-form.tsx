@@ -149,7 +149,7 @@ export default function StartLotteryForm() {
         endTime: "",
       });
     }
-  }, [isStartSuccess]);
+  }, [isStartSuccess, startLotteryParams]);
 
   return (
     <Card>

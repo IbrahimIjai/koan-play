@@ -2,18 +2,19 @@
 
 import { Button, ButtonProps } from "../ui/button";
 import { FC } from "react";
-import { useAccount, useConnect } from "wagmi";
+import { Connector, useAccount, useConnect } from "wagmi";
 
 import { useIsMounted } from "@/hooks/useIsMounted";
 // import { useAppKit } from "@reown/appkit/react";
 import { useMiniKit } from "@/hooks/useMiniKit";
-// import {
-//   useMiniKit,
-//   // useAddFrame,
-//   // useOpenUrl,
-// } from "@coinbase/onchainkit/minikit";
 import { farcasterFrame as miniAppConnector } from "@farcaster/frame-wagmi-connector";
-import { metaMask } from "wagmi/connectors";
+import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const isMounted = useIsMounted();
@@ -22,12 +23,31 @@ const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
   const { isDisconnected, isConnecting } = useAccount();
   const { connect, connectors } = useConnect();
 
+  // Handle connection attempt
+  const handleConnect = (connector: Connector) => {
+    connect(
+      { connector },
+      {
+        onSuccess: () => {
+          toast.success(`Connected to ${connector.name}`, {
+            description: "Your wallet has been successfully connected",
+          });
+        },
+        onError: (error) => {
+          toast.error("Connection failed", {
+            description: error.message || "Failed to connect to wallet",
+          });
+        },
+      },
+    );
+  };
+
   if (!isMounted) return <Button {...props}>Loading...</Button>;
 
   if (isConnecting) {
     return (
       <Button disabled {...props}>
-        Connecting...
+        Connecting...fuk
       </Button>
     );
   }
@@ -40,12 +60,44 @@ const ConnectChecker: FC<ButtonProps> = ({ children, ...props }) => {
             Connect wallet
           </Button>
         ) : (
-          <Button
-            onClick={() => connect({ connector: metaMask() })}
-            className="shadow-2xl"
-          >
-            Connect Wallet
-          </Button>
+          <>
+            {connectors?.length === 0 ? (
+              <DropdownMenuItem disabled>No wallets available</DropdownMenuItem>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="shadow-lg" {...props}>
+                    Connect Wallet
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {connectors.map((connector) => (
+                    <DropdownMenuItem
+                      key={connector.uid}
+                      onClick={() => handleConnect(connector)}
+                      className="cursor-pointer flex items-center py-2"
+                    >
+                      {connector.icon && (
+                        <div className="mr-2 h-5 w-5 overflow-hidden">
+                          {typeof connector.icon === "string" ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={connector.icon}
+                              alt={`${connector.name} icon`}
+                              className="h-full w-full object-contain"
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      )}
+                      <span>{connector.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </>
         )}
       </>
     );
