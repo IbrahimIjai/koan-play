@@ -129,21 +129,21 @@ export default function LotteryTicketADSCard() {
   const prizeBreakdowns = calculatePrizeBreakdowns();
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <Card className="overflow-hidden border border-gray-200 shadow-md">
+    <div className="w-full max-w-lg mx-auto">
+      <Card className="overflow-hidden border shadow-md">
         {/* Card Header with Countdown */}
-        <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
+        <CardHeader className="bg-gradient-to-r from-primary to-indigo-600 text-white p-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Next Draw</h2>
             <div className="text-sm font-medium opacity-90">
               {isLotteryIdLoading ? (
-                <Skeleton className="h-4 w-24 bg-white/20" />
+                <Skeleton className="h-4 w-24" />
               ) : (
                 `#${currentLotteryId?.toString() || "..."}`
               )}
               {" | "}
               {isLotteryInfoLoading ? (
-                <Skeleton className="h-4 w-32 bg-white/20 inline-block" />
+                <Skeleton className="h-4 w-32 inline-block" />
               ) : (
                 drawDate
               )}
@@ -152,7 +152,7 @@ export default function LotteryTicketADSCard() {
 
           {isLotteryInfoLoading ? (
             <div className="mt-6 flex justify-center">
-              <Skeleton className="h-16 w-full bg-white/20 rounded-md" />
+              <Skeleton className="h-16 w-full  rounded-md" />
             </div>
           ) : (
             isLotteryOpen && (
@@ -260,7 +260,7 @@ export default function LotteryTicketADSCard() {
             </CollapsibleTrigger>
             <CollapsibleContent className="border-t">
               <div className="p-6 space-y-4">
-                <h4 className="font-medium text-gray-900 mb-3">
+                <h4 className="font-medium text-muted-foreground mb-3">
                   Prize Breakdowns
                 </h4>
 
@@ -302,7 +302,7 @@ export default function LotteryTicketADSCard() {
                               })}{" "}
                               {tokenSymbol}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               ~$
                               {(bracket.prize * 2).toLocaleString(undefined, {
                                 maximumFractionDigits: 2,
@@ -313,13 +313,15 @@ export default function LotteryTicketADSCard() {
                       ))}
                 </div>
 
-                <div className="pt-3 border-t border-gray-100">
+                <div className="pt-3 border-t flex items-center justify-between px-2">
                   <div>
-                    <h4 className="font-medium text-gray-900">Ticket Price</h4>
+                    <h4 className="font-medium">
+                      Ticket Price
+                    </h4>
                     {isLotteryInfoLoading ? (
                       <Skeleton className="h-5 w-24 mt-1" />
                     ) : (
-                      <p className="text-gray-600">
+                      <p className="text-muted-foreground text-xs">
                         {lotteryInfo
                           ? `${formatUnits(lotteryInfo.priceTicketInPaymentToken, tokenDecimals)} ${tokenSymbol}`
                           : "Loading..."}
@@ -328,8 +330,10 @@ export default function LotteryTicketADSCard() {
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-medium text-gray-900">Lottery Status</h4>
+                <div className="space-y-2">
+                  <h4 className="font-medium ">
+                    Lottery Status
+                  </h4>
                   {isLotteryInfoLoading ? (
                     <Skeleton className="h-6 w-20 mt-1" />
                   ) : (
@@ -410,7 +414,7 @@ function LotteryCountdown({ endTime }: { endTime: number }) {
       <div className="flex items-center justify-center gap-4 md:gap-6">
         <NumberFlowGroup>
           <div className="text-center">
-            <div className="bg-white/20 rounded-md md:rounded-lg px-3 py-2 md:px-4 md:py-3">
+            <div className="bg-white/20 rounded-md md:rounded-lg px-2 py-2 md:px-4 md:py-3">
               <NumberFlow
                 className="text-2xl md:text-3xl font-bold text-white"
                 value={timeLeft.days}
@@ -420,7 +424,7 @@ function LotteryCountdown({ endTime }: { endTime: number }) {
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-md md:rounded-lg px-3 py-2 md:px-4 md:py-3">
+            <div className="bg-white/20 rounded-md md:rounded-lg px-2 py-2 md:px-4 md:py-3">
               <NumberFlow
                 className="text-2xl md:text-3xl font-bold text-white"
                 value={timeLeft.hours}
@@ -430,7 +434,7 @@ function LotteryCountdown({ endTime }: { endTime: number }) {
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-md md:rounded-lg px-3 py-2 md:px-4 md:py-3">
+            <div className="bg-white/20 rounded-md md:rounded-lg px-2 py-2 md:px-4 md:py-3">
               <NumberFlow
                 className="text-2xl md:text-3xl font-bold text-white"
                 value={timeLeft.minutes}
@@ -440,7 +444,7 @@ function LotteryCountdown({ endTime }: { endTime: number }) {
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-md md:rounded-lg px-3 py-2 md:px-4 md:py-3">
+            <div className="bg-white/20 rounded-md md:rounded-lg px-2 py-2 md:px-4 md:py-3">
               <NumberFlow
                 className="text-2xl md:text-3xl font-bold text-white"
                 value={timeLeft.seconds}

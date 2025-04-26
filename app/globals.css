@@ -109,13 +109,13 @@ body {
 
 @keyframes tilt-rotate {
   0%, 100% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   25% {
-    transform: translate(-50%, -50%) rotate(-5deg); /* anticlockwise tilt */
+    transform: rotate(-5deg); /* anticlockwise tilt */
   }
   75% {
-    transform: translate(-50%, -50%) rotate(5deg); /* clockwise tilt */
+    transform: rotate(5deg); /* clockwise tilt */
   }
 }
 

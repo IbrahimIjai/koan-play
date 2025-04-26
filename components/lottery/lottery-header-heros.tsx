@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 
 import { useAccount, useReadContract } from "wagmi";
 import { formatUnits } from "viem";
-import { format } from "date-fns";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CONTRACTS } from "@/configs/contracts-confg";
 import { baseSepolia } from "viem/chains";
@@ -91,45 +89,20 @@ export default function LotteryHeader() {
 
   const isLoading = isLoadingId || isLoadingInfo || isLoadingUserTickets;
 
-  // Format the draw time
-  const formattedDrawTime = lotteryInfo?.endTime
-    ? format(
-        new Date(Number(lotteryInfo.endTime) * 1000),
-        "do MMMM, yyyy, h:mma 'GMT+1'",
-      )
-    : "TBD";
-
-  // Get user ticket count
-  const userTicketCount =
-    userTickets && userTickets[0] ? userTickets[0].length : 0;
 
   const prizePool = lotteryInfo
     ? formatUnits(lotteryInfo.amountCollectedInPaymentToken, tokenDecimals)
     : "0.00";
 
   return (
-    <>
+    <div className="flex flex-col items-center space-y-10">
       {isLoading ? (
-        <CardContent className="p-6">
-          <div className="space-y-4">
-            <div className="flex flex-col items-center gap-5">
-              <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
-                Prize Pot
-              </span>
-              <Skeleton className="h-8 w-3/4" />
-            </div>
-
-            <div className="flex flex-col items-center">
-              <span className="text-xs font-medium text-muted-foreground">
-                Draw Time
-              </span>
-              <Skeleton className="h-6 w-3/4" />
-            </div>
-
-            {/* <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-10 w-full" /> */}
-          </div>
-        </CardContent>
+        <div className="flex flex-col items-center gap-5">
+          <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+            Prize Pot
+          </span>
+          <Skeleton className="h-8 w-3/4" />
+        </div>
       ) : (
         <>
           {/* Prize pot */}
@@ -163,6 +136,6 @@ export default function LotteryHeader() {
           }
         />
       </div>
-    </>
+    </div>
   );
 }

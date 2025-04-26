@@ -11,7 +11,7 @@ function Header() {
 
   console.log({ context });
   return (
-    <div className="flex items-center justify-between px-3 py-2 mx-auto max-w-6xl border rounded-lg p-2">
+    <div className="flex items-center justify-between px-3 py-2 mx-auto max-w-6xl border rounded-lg p-2 mt-6 mb-4">
       <div className="flex items-center gap-1">
         <Avatar className="h-4 w-4">
           <AvatarImage

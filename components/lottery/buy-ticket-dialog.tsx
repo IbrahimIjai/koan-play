@@ -271,7 +271,7 @@ export default function BuyTicketDialog({
     // Return either a pulsing button or a normal button based on the variant prop
     if (variant === "pulsing") {
       return (
-        <PulsatingButton  
+        <PulsatingButton
           className={cn(buttonClassName, "size-lg w-fit")}
           onClick={() => onOpenChange(true)}
           disabled={disabled}
@@ -441,16 +441,34 @@ export default function BuyTicketDialog({
               <div className="grid gap-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="ticketCount">Number of Tickets</Label>
-                  <div className="flex space-x-2">
+
+                  <Input
+                    id="ticketCount"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={ticketCount}
+                    onChange={(e) =>
+                      setTicketCount(Number.parseInt(e.target.value) || 1)
+                    }
+                    disabled={isBuying || isBuyLoading}
+                  />
+
+                  <p className="text-xs text-muted-foreground -mt-1">
+                    Buying multiple tickets gives you a discount!
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ticketNumbers">
+                    Ticket Numbers (comma separated)
+                  </Label>
+                  <div className="flex items-center space-x-3">
                     <Input
-                      id="ticketCount"
-                      type="number"
-                      min="1"
-                      max="100"
-                      value={ticketCount}
-                      onChange={(e) =>
-                        setTicketCount(Number.parseInt(e.target.value) || 1)
-                      }
+                      id="ticketNumbers"
+                      placeholder="1234567, 1234568, 1234569"
+                      value={ticketNumbers}
+                      onChange={(e) => setTicketNumbers(e.target.value)}
                       disabled={isBuying || isBuyLoading}
                     />
                     <Button
@@ -466,22 +484,6 @@ export default function BuyTicketDialog({
                       Generate
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Buying multiple tickets gives you a discount!
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="ticketNumbers">
-                    Ticket Numbers (comma separated)
-                  </Label>
-                  <Input
-                    id="ticketNumbers"
-                    placeholder="1234567, 1234568, 1234569"
-                    value={ticketNumbers}
-                    onChange={(e) => setTicketNumbers(e.target.value)}
-                    disabled={isBuying || isBuyLoading}
-                  />
                   <p className="text-xs text-muted-foreground">
                     Each number must be between 1000000 and 1999999
                   </p>

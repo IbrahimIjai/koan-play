@@ -29,8 +29,8 @@ export const PulsatingButton = React.forwardRef<
       <button
         ref={ref}
         className={cn(
-          "relative flex cursor-pointer items-center justify-center rounded-lg bg-primary px-4 py-2 text-center text-primary-foreground",
-          className,
+          "relative flex cursor-pointer items-center mx-auto justify-center rounded-lg bg-primary px-4 py-2 text-center text-primary-foreground",
+          className, enableTilt && "animate-tilt-rotate"
         )}
         style={
           {
@@ -42,11 +42,11 @@ export const PulsatingButton = React.forwardRef<
         {...props}
       >
         <div
-          className={cn("relative z-10", enableTilt && "animate-tilt-rotate")}
+          className={cn("relative z-10")}
         >
           {children}
         </div>
-        <div className="absolute left-1/2 top-1/2 size-full -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-lg bg-inherit" />
+        <div  className="absolute left-1/2 top-1/2 size-full -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-lg bg-inherit" />
       </button>
     );
   },
