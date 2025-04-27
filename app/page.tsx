@@ -5,6 +5,7 @@ import { CountdownMain } from "@/components/koan-play-animation";
 import { motion } from "framer-motion";
 import { useMiniKit } from "@/hooks/useMiniKit";
 import { useAddFrame } from "@/hooks/useAddFrame";
+import { useRouter } from "next/navigation";
 // import { useMiniKit, useAddFrame } from "@coinbase/onchainkit/minikit";
 
 export default function App() {
@@ -12,6 +13,11 @@ export default function App() {
   const [frameAdded, setFrameAdded] = useState(false);
   console.log({ frameAdded });
   const addFrame = useAddFrame();
+
+  const { push } = useRouter();
+  useEffect(() => {
+    push("/lottery");
+  });
 
   useEffect(() => {
     if (!isFrameReady) {

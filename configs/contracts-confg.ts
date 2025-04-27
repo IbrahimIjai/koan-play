@@ -34,8 +34,8 @@ const createContractConfig = (
 export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
-      [baseSepolia.id]: "0xcebCFDC721115d382b853338Ddc9209D42996617",
-      [base.id]: "0xcebCFDC721115d382b853338Ddc9209D42996617", // Update with mainnet address
+      [baseSepolia.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4",
+      [base.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4", // Update with mainnet address
     },
     LOTTERY_ABI,
   ),
@@ -48,8 +48,8 @@ export const CONTRACTS = {
   ),
   RANDOM_NUMBER_GENERATOR: createContractConfig(
     {
-      [baseSepolia.id]: "0x14DA37E6d9a67Ff563e787De51063C26c09F9b73",
-      [base.id]: "0x14DA37E6d9a67Ff563e787De51063C26c09F9b73", // Update with mainnet address
+      [baseSepolia.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD",
+      [base.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD", // Update with mainnet address
     },
     RANDOMNUMBER_GENERATOR_ABI,
   ),
