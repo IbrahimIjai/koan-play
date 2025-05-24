@@ -229,11 +229,11 @@ export default function LotteryTicketADSCard() {
               buttonText={
                 isLotteryInfoLoading
                   ? "Loading..."
-                  : lotteryInfo?.status === 1
+                  : Number(lotteryInfo?.status) === 1
                     ? "Get Tickets"
-                    : lotteryInfo?.status === 0
+                    : Number(lotteryInfo?.status) === 0
                       ? "Preparing"
-                      : lotteryInfo?.status === 2
+                      : Number(lotteryInfo?.status) === 2
                         ? "Drawing"
                         : "Finished"
               }

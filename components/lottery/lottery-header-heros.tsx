@@ -126,11 +126,11 @@ export default function LotteryHeader() {
           enableTilt={true}
           tiltDuration="3s"
           buttonText={
-            lotteryInfo && lotteryInfo.status === 1
+            lotteryInfo && Number(lotteryInfo.status) === 1
               ? "Get Tickets"
-              : lotteryInfo?.status === 0
+              : Number(lotteryInfo?.status) === 0
                 ? "Lottery Preparing"
-                : lotteryInfo?.status === 2
+                : Number(lotteryInfo?.status) === 2
                   ? "Drawing in Progress"
                   : "Lottery Finished"
           }

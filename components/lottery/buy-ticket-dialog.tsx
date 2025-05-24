@@ -254,11 +254,11 @@ export default function BuyTicketDialog({
       currentLotteryId &&
       currentLotteryId > 0n && (
         <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
-          {lotteryInfo?.status === 0
+          {Number(lotteryInfo?.status) === 0
             ? "Preparing"
-            : lotteryInfo?.status === 2
+            : Number(lotteryInfo?.status) === 2
               ? "Processing"
-              : lotteryInfo?.status === 3
+              : Number(lotteryInfo?.status) === 3
                 ? "Claimable"
                 : "Unavailable"}
         </span>
