@@ -30,7 +30,7 @@ import {
 import CopyToClipboard from "react-copy-to-clipboard";
 import { LOTTERY_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getTokenByAddress } from "@/configs/token-list";
 import { erc20Abi } from "viem";
@@ -78,7 +78,7 @@ export default function BuyTicketDialog({
   enableTilt = false,
   tiltDuration = "2s",
 }: BuyTicketDialogProps) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
   const [ticketNumbers, setTicketNumbers] = useState<string>("");
 
   const [ticketsCopied, setTicketsCopied] = useState(false);
@@ -91,13 +91,14 @@ export default function BuyTicketDialog({
   const [tokenDecimals, setTokenDecimals] = useState(18);
 
   const { data: currentLotteryId } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "viewCurrentLotteryId",
+    chainId,
   });
 
   const { data: lotteryInfo } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "viewLottery",
     args: [currentLotteryId || 0n],
@@ -105,9 +106,10 @@ export default function BuyTicketDialog({
   });
 
   const { data: paymentTokenAddress } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "paymentToken",
+    chainId,
   });
 
   const { data: balance } = useReadContract({
@@ -137,7 +139,7 @@ export default function BuyTicketDialog({
   useEffect(() => {
     if (paymentTokenAddress) {
       const tokenInfo = getTokenByAddress(
-        baseSepolia.id,
+        chainId || base.id,
         paymentTokenAddress as string,
       );
       if (tokenInfo) {
@@ -172,7 +174,7 @@ export default function BuyTicketDialog({
       .map((num) => Number.parseInt(num.trim()));
 
     buyTickets({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "buyTickets",
       args: [currentLotteryId, numbers],
@@ -520,9 +522,9 @@ export default function BuyTicketDialog({
                 <ApprovalChecker
                   userAddress={address}
                   tokenAddress={paymentTokenAddress as `0x${string}`}
-                  spenderAddress={CONTRACTS.LOTTERY.address[baseSepolia.id]}
+                  spenderAddress={CONTRACTS.LOTTERY.address[chainId || base.id]}
                   amount={totalCostBigInt}
-                  chainId={baseSepolia.id}
+                  chainId={chainId || base.id}
                   tokenSymbol={tokenSymbol}
                   className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
                   disabled={!hasEnoughBalance()}
