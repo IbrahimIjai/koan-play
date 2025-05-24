@@ -198,7 +198,10 @@ export default function BuyTicketDialog({
   const calculateTotalCost = (price: bigint, count: bigint) => {
     if (!lotteryInfo) return 0n;
 
-    const discountDivisor = lotteryInfo.discountDivisor ?? 500;
+    const discountDivisor = lotteryInfo.discountDivisor ?? 500n;
+    // Prevent division by zero
+    if (discountDivisor === 0n) return price * count;
+    
     return (price * count * (discountDivisor + 1n - count)) / discountDivisor;
   };
 

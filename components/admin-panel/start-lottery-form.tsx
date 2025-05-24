@@ -21,11 +21,15 @@ import { Label } from "@/components/ui/label";
 import { RefreshCw } from "lucide-react";
 import { LOTTERY_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
+import { getChainName } from "@/configs/chain-names";
 import { getTokenByAddress } from "@/configs/token-list";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 
 export default function StartLotteryForm() {
+  const { chainId } = useAccount();
+
   // Calculate default end time (current time + 1 hour + 5 minutes)
   const getDefaultEndTime = () => {
     const date = new Date();
@@ -51,16 +55,17 @@ export default function StartLotteryForm() {
 
   // Get payment token
   const { data: paymentTokenAddress } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "paymentToken",
+    chainId,
   });
 
   // Get token info
   useEffect(() => {
     if (paymentTokenAddress) {
       const tokenInfo = getTokenByAddress(
-        baseSepolia.id,
+        chainId || base.id,
         paymentTokenAddress as string,
       );
       if (tokenInfo) {
@@ -116,7 +121,7 @@ export default function StartLotteryForm() {
     );
 
     startLottery({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "startLottery",
       args: [
@@ -139,8 +144,11 @@ export default function StartLotteryForm() {
   // Show success toast
   useEffect(() => {
     if (isStartSuccess) {
-      toast.success("Lottery started successfully", {
-        description: "A new lottery round has been created.",
+      // Get chain name using our utility
+      const chainName = getChainName(chainId);
+      
+      toast.success(`Lottery started successfully on ${chainName}`, {
+        description: `A new lottery round has been created on the ${chainName} network.`,
       });
 
       // Reset form after success
@@ -149,7 +157,7 @@ export default function StartLotteryForm() {
         endTime: "",
       });
     }
-  }, [isStartSuccess]);
+  }, [isStartSuccess, chainId]);
 
   return (
     <Card>
