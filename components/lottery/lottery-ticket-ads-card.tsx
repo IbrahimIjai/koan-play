@@ -12,7 +12,7 @@ import {
 import { ChevronDown, Clock, Ticket, Trophy } from "lucide-react";
 import { LOTTERY_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
 import { getTokenByAddress } from "@/configs/token-list";
 import { format } from "date-fns";
 import BuyTicketDialog from "./buy-ticket-dialog";
@@ -26,7 +26,7 @@ import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
 import { Skeleton } from "../ui/skeleton";
 
 export default function LotteryTicketADSCard() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [tokenSymbol, setTokenSymbol] = useState("USDC");
@@ -34,24 +34,24 @@ export default function LotteryTicketADSCard() {
 
   const { data: currentLotteryId, isLoading: isLotteryIdLoading } =
     useReadContract({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "viewCurrentLotteryId",
-      chainId: baseSepolia.id,
+      chainId,
     });
 
   // Get payment token address
   const { data: paymentTokenAddress} =
     useReadContract({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "paymentToken",
-      chainId: baseSepolia.id,
+      chainId,
     });
 
   useEffect(() => {
     if (paymentTokenAddress) {
-      const tokenInfo = getTokenByAddress(baseSepolia.id, paymentTokenAddress);
+      const tokenInfo = getTokenByAddress(chainId || base.id, paymentTokenAddress);
       if (tokenInfo) {
         setTokenSymbol(tokenInfo.symbol);
         setTokenDecimals(tokenInfo.decimals);
@@ -61,7 +61,7 @@ export default function LotteryTicketADSCard() {
 
   const { data: lotteryInfo, isLoading: isLotteryInfoLoading } =
     useReadContract({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "viewLottery",
       args: [currentLotteryId || 0n],
@@ -72,7 +72,7 @@ export default function LotteryTicketADSCard() {
 
   const { data: userTicketsData, isLoading: isUserTicketsLoading } =
     useReadContract({
-      address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+      address: CONTRACTS.LOTTERY.address[chainId || base.id],
       abi: LOTTERY_ABI,
       functionName: "viewUserInfoForLotteryId",
       args: [address || "0x0", currentLotteryId || 0n, 0n, 100n],

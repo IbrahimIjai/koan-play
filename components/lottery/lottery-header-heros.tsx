@@ -6,7 +6,7 @@ import { useAccount, useReadContract } from "wagmi";
 import { formatUnits } from "viem";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CONTRACTS } from "@/configs/contracts-confg";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
 import { LOTTERY_ABI } from "@/configs/abis";
 
 import { getTokenByAddress } from "@/configs/token-list";
@@ -21,7 +21,7 @@ export default function LotteryHeader() {
     isLoading: isLoadingId,
     // isError: isIdError,
   } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "viewCurrentLotteryId",
     chainId,
@@ -32,7 +32,7 @@ export default function LotteryHeader() {
     isLoading: isLoadingInfo,
     // isError: isInfoError,
   } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "viewLottery",
     args: [currentLotteryId || 0n],
@@ -47,7 +47,7 @@ export default function LotteryHeader() {
     isLoading: isLoadingUserTickets,
     refetch: refetchUserLotteryInfo,
   } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "viewUserInfoForLotteryId",
     args: [address || "0x0", currentLotteryId || 0n, 0n, 100n],
@@ -60,7 +60,7 @@ export default function LotteryHeader() {
   console.log({ userTickets });
 
   const { data: paymentTokenAddress } = useReadContract({
-    address: CONTRACTS.LOTTERY.address[baseSepolia.id],
+    address: CONTRACTS.LOTTERY.address[chainId || base.id],
     abi: LOTTERY_ABI,
     functionName: "paymentToken",
     chainId,
@@ -77,7 +77,7 @@ export default function LotteryHeader() {
   useEffect(() => {
     if (paymentTokenAddress) {
       const tokenInfo = getTokenByAddress(
-        baseSepolia.id,
+        chainId || base.id,
         paymentTokenAddress as string,
       );
       if (tokenInfo) {
