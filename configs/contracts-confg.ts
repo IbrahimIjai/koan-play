@@ -35,21 +35,21 @@ export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
       [baseSepolia.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4",
-      [base.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4", // Update with mainnet address
+      [base.id]: "0xba277724AeA7A8319BB80fAB87929976CcE8BB40",
     },
     LOTTERY_ABI,
   ),
   PAYMENT_TOKEN: createContractConfig(
     {
       [baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-      [base.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", // Update with mainnet address
+      [base.id]: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
     },
     erc20Abi,
   ),
   RANDOM_NUMBER_GENERATOR: createContractConfig(
     {
       [baseSepolia.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD",
-      [base.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD", // Update with mainnet address
+      [base.id]: "0x99Ef899f9D4B1F3B79e431Bf571d9E077D6B815F",
     },
     RANDOMNUMBER_GENERATOR_ABI,
   ),
