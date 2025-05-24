@@ -35,7 +35,7 @@ export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
       [baseSepolia.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4",
-      [base.id]: "0xba277724AeA7A8319BB80fAB87929976CcE8BB40",
+      [base.id]: "0x287e489c9bd86D64FDa843d26A71bcd804d78943",
     },
     LOTTERY_ABI,
   ),
@@ -49,7 +49,7 @@ export const CONTRACTS = {
   RANDOM_NUMBER_GENERATOR: createContractConfig(
     {
       [baseSepolia.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD",
-      [base.id]: "0x99Ef899f9D4B1F3B79e431Bf571d9E077D6B815F",
+      [base.id]: "0xdBC6887Df51147D37da1430A7b1361c3AA2DA54c",
     },
     RANDOMNUMBER_GENERATOR_ABI,
   ),
