@@ -15,8 +15,8 @@ importers:
         specifier: ^0.0.34
         version: 0.0.34(typescript@5.8.3)(zod@3.25.28)
       '@farcaster/frame-wagmi-connector':
-        specifier: ^0.0.22
-        version: 0.0.22(@farcaster/frame-sdk@0.0.34(typescript@5.8.3)(zod@3.25.28))(@wagmi/core@2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28)))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))
+        specifier: ^0.0.46
+        version: 0.0.46(@farcaster/frame-sdk@0.0.34(typescript@5.8.3)(zod@3.25.28))(@wagmi/core@2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28)))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.57.0(react@19.1.0))
@@ -442,10 +442,10 @@ packages:
       '@wagmi/core': ^2.14.1
       viem: ^2.21.55
 
-  '@farcaster/frame-wagmi-connector@0.0.22':
-    resolution: {integrity: sha512-CVWvezX/K3MoXrG3nJI1ifC3FYlNaoDVKstFLQ7KtF2nOaZ7bW7yXkI4lsFRHBVekdtN3X7dIFrbC6n6EmKYqw==}
+  '@farcaster/frame-wagmi-connector@0.0.46':
+    resolution: {integrity: sha512-SCFrOw239PZsojXVL3w5faOAvSgi5t+weL1H8Mk86lb5BnI7zMrMKzaCTiaFfdG/Vh4JDlY0t9E33CqCAjOmCQ==}
     peerDependencies:
-      '@farcaster/frame-sdk': ^0.0.34
+      '@farcaster/frame-sdk': ^0.0.57
       '@wagmi/core': ^2.14.1
       viem: ^2.21.55
 
@@ -5027,7 +5027,7 @@ snapshots:
       '@wagmi/core': 2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))
       viem: 2.30.6(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28)
 
-  '@farcaster/frame-wagmi-connector@0.0.22(@farcaster/frame-sdk@0.0.34(typescript@5.8.3)(zod@3.25.28))(@wagmi/core@2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28)))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))':
+  '@farcaster/frame-wagmi-connector@0.0.46(@farcaster/frame-sdk@0.0.34(typescript@5.8.3)(zod@3.25.28))(@wagmi/core@2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28)))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))':
     dependencies:
       '@farcaster/frame-sdk': 0.0.34(typescript@5.8.3)(zod@3.25.28)
       '@wagmi/core': 2.16.7(@tanstack/query-core@5.73.3)(@types/react@19.1.1)(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.4.0(react@19.1.0))(viem@2.26.3(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.25.28))
