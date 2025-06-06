@@ -1,14 +1,15 @@
-# 🎰 Farcaster Lottery & Prediction App
+# 🎰 Koan Play - Farcaster Prediction & Lottery
 
-A decentralized lottery and prediction market platform built as a Farcaster mini-app, inspired by PancakeSwap. This application allows users to participate in lotteries and make predictions on various events directly within the Farcaster ecosystem.
+A decentralized prediction market and lottery platform built as a Farcaster mini-app, inspired by PancakeSwap but using USDC. Koan Play allows users to participate in prediction markets and lotteries directly within the Farcaster ecosystem, with all payouts in USDC.
 
 ## ✨ Features
 
-- 🎫 **Lottery System**: Buy tickets and win big prizes in regular lottery draws
-- 🔮 **Prediction Markets**: Bet on the outcomes of various events
-- 🔒 **Decentralized & Secure**: Built on blockchain for transparency and security
-- 🌐 **Farcaster Integration**: Seamless experience within the Farcaster ecosystem
-- 🏆 **Fair & Transparent**: All results are verifiable on-chain
+- 🎫 **USDC Lottery System**: Buy tickets with USDC for a chance to win big in regular lottery draws
+- 🔮 **Prediction Markets**: Bet USDC on the outcomes of various events and markets
+- 💰 **USDC Rewards**: All winnings and rewards are paid in USDC
+- 🔒 **Decentralized & Secure**: Built on blockchain with smart contracts for transparency and security
+- 🌐 **Farcaster Native**: Seamless experience within the Farcaster ecosystem
+- 🏆 **Provably Fair**: All results and payouts are verifiable on-chain
 
 ## 🚀 Getting Started
 
@@ -16,14 +17,14 @@ A decentralized lottery and prediction market platform built as a Farcaster mini
 
 - Node.js 18.0 or later
 - Farcaster account
-- Ethereum wallet (MetaMask, Coinbase Wallet, etc.)
+- Web3 wallet (MetaMask, Coinbase Wallet, etc.) with USDC on the supported network
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/farcaster-lottery-prediction.git
-   cd farcaster-lottery-prediction
+   git clone https://github.com/your-username/koan-play.git
+   cd koan-play
    ```
 
 2. Install dependencies:
@@ -63,7 +64,15 @@ A decentralized lottery and prediction market platform built as a Farcaster mini
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [contributing guidelines](./CONTRIBUTING.md) to get started.
+1. **Fork** the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Install dependencies and set up the development environment
+4. Make your changes and ensure tests pass
+5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+6. Push to the branch (`git push origin feature/AmazingFeature`)
+7. Open a **Pull Request**
+
+For more details, please read our [contributing guidelines](./CONTRIBUTING.md).
 
 ## 📄 License
 
@@ -71,7 +80,8 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 🙏 Acknowledgements
 
-- [PancakeSwap](https://pancakeswap.finance/) for inspiration
+- [PancakeSwap](https://pancakeswap.finance/) for the prediction and lottery inspiration
 - [Farcaster](https://farcaster.xyz/) for the social protocol
 - [Next.js](https://nextjs.org/) for the React framework
+- [USDC](https://www.circle.com/en/usdc) for the stablecoin integration
 - [OnchainKit](https://onchainkit.xyz/) for the development toolkit
