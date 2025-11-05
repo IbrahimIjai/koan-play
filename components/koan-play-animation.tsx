@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/drawer";
 import { Check, Heart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Separator } from "./ui/separator";
 import { useMiniKit } from "@/hooks/useMiniKit";
 import { useAddFrame } from "@/hooks/useAddFrame";
 // import {
@@ -66,13 +65,36 @@ export function CountdownMain() {
       className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto py-8 px-4"
     >
       {/* Glassmorphism Card Container */}
-      <div className="w-full rounded-xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl overflow-hidden">
+      <div className="w-full rounded-2xl bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
         {/* Header Section */}
-        <div className="relative bg-gradient-to-r from-indigo-900/70 to-primary/70 px-6 py-8">
+        <div className="relative bg-gradient-to-br from-indigo-600/30 via-purple-600/30 to-pink-600/30 px-6 py-10">
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-purple-500/20 blur-2xl"></div>
-            <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-indigo-500/20 blur-2xl"></div>
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-purple-500/20 blur-3xl"
+            />
+            <motion.div
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.2, 0.4, 0.2],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+              className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-indigo-500/20 blur-3xl"
+            />
           </div>
 
           <div className="relative z-10">
@@ -81,13 +103,13 @@ export function CountdownMain() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-center mb-6"
+              className="text-center mb-8"
             >
-              <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-purple-200">
+              <h1 className="text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 mb-3">
                 Koan Play Lottery
               </h1>
-              <p className="text-indigo-200/80 mt-2">
-                Get early access to exclusive benefits
+              <p className="text-indigo-100/70 text-sm md:text-base font-medium">
+                Join the waitlist for exclusive early access benefits
               </p>
             </motion.div>
 
@@ -99,14 +121,14 @@ export function CountdownMain() {
             >
               <Countdown
                 targetUnixTimestamp={launchTimestamp}
-                className="p-4 rounded-lg bg-black/20 backdrop-blur-md border border-white/10"
+                className="p-5 rounded-xl bg-black/30 backdrop-blur-md border border-white/20 shadow-lg"
               />
             </motion.div>
           </div>
         </div>
 
         {/* Body Section */}
-        <div className="bg-slate-900/80 p-6 flex flex-col items-center">
+        <div className="bg-slate-900/60 backdrop-blur-sm p-8 flex flex-col items-center">
           {/* Success Message (if user is already registered) */}
           {isRegistered && (
             <SuccessAlert
@@ -120,21 +142,25 @@ export function CountdownMain() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-4"
+            className="mt-4 w-full max-w-xs"
           >
             <TaskDrawer isRegistered={isRegistered} userFid={userFid || null} />
           </motion.div>
 
           {/* Info Text */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="mt-6 text-xs text-gray-400 text-center max-w-md"
+            className="mt-8 text-center max-w-md space-y-2"
           >
-            Complete all tasks to secure your spot for early access. Limited
-            slots available.
-          </motion.p>
+            <p className="text-sm text-gray-300 font-medium">
+              🎯 Complete all tasks to secure your spot
+            </p>
+            <p className="text-xs text-gray-400">
+              Limited slots available • First come, first served
+            </p>
+          </motion.div>
         </div>
       </div>
     </motion.div>
@@ -277,111 +303,163 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <Button
-          className="px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all shadow-lg"
+          className="w-full px-8 py-6 text-base font-semibold bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:from-indigo-600 hover:via-purple-700 hover:to-pink-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
           disabled={isRegistered}
+          size="lg"
         >
-          {isRegistered ? "Already Registered" : "Get Early Access"}
+          {isRegistered ? (
+            <span className="flex items-center gap-2">
+              <Check className="h-5 w-5" />
+              Already Registered
+            </span>
+          ) : (
+            "Get Early Access 🚀"
+          )}
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Get early access benefits</DrawerTitle>
-            <DrawerDescription>
-              Complete these actions to unlock early access benefits
+      <DrawerContent className="bg-gradient-to-b from-slate-900 to-slate-950 border-t border-white/10">
+        <div className="mx-auto w-full max-w-md">
+          <DrawerHeader className="text-center pb-6">
+            <DrawerTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+              Get Early Access Benefits
+            </DrawerTitle>
+            <DrawerDescription className="text-base text-gray-300 mt-2">
+              Complete these simple tasks to unlock exclusive early access
             </DrawerDescription>
           </DrawerHeader>
 
           {isRegistered ? (
-            <div className="p-6 text-center">
-              <div className="flex justify-center mb-4">
-                <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-                  <Check className="h-8 w-8 text-green-600" />
-                </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="p-8 text-center"
+            >
+              <div className="flex justify-center mb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+                  className="h-20 w-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg"
+                >
+                  <Check className="h-10 w-10 text-white" strokeWidth={3} />
+                </motion.div>
               </div>
-              <h3 className="font-medium text-lg mb-2">
+              <h3 className="font-bold text-xl mb-3 text-green-400">
                 You&apos;re already registered!
               </h3>
-              <p className="text-gray-500 text-sm">
-                You&apos;ve already completed all tasks and secured your spot
-                for early access.
+              <p className="text-gray-400 text-sm leading-relaxed">
+                You&apos;ve completed all tasks and secured your spot for early
+                access. We&apos;ll notify you when it begins! 🎉
               </p>
-            </div>
+            </motion.div>
           ) : (
-            <div className="p-4 space-y-4">
+            <div className="px-6 pb-4 space-y-3">
               {/* Follow X Button */}
-              <Button
-                disabled={actions.followX}
-                variant="outline"
-                className="w-full transition-colors"
-                onClick={() => handleAction("followX")}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
               >
-                <div className="flex items-center gap-3">
-                  <XLogo />
-                  <span>Follow on X</span>
-                </div>
-                {actions.followX && (
-                  <Check className="ml-auto h-4 w-4 text-green-500" />
-                )}
-              </Button>
-
-              <Separator />
+                <Button
+                  disabled={actions.followX}
+                  variant="outline"
+                  className="w-full h-14 justify-start text-left border-white/10 hover:border-white/20 hover:bg-white/5 transition-all"
+                  onClick={() => handleAction("followX")}
+                >
+                  <div className="flex items-center gap-3 flex-1">
+                    <div className="bg-black rounded-full p-2">
+                      <XLogo />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Follow on X</p>
+                      <p className="text-xs text-muted-foreground">@koanprotocol</p>
+                    </div>
+                  </div>
+                  {actions.followX && (
+                    <Check className="h-5 w-5 text-green-500" strokeWidth={3} />
+                  )}
+                </Button>
+              </motion.div>
 
               {/* Join Telegram Button */}
-              <Button
-                variant="outline"
-                disabled={actions.joinTelegram}
-                className="w-full transition-colors"
-                onClick={() => handleAction("joinTelegram")}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
               >
-                <div className="flex items-center gap-3">
-                  <TelegramLogo />
-                  <span>Join Telegram</span>
-                </div>
-                {actions.joinTelegram && (
-                  <Check className="ml-auto h-4 w-4 text-green-500" />
-                )}
-              </Button>
-
-              <Separator />
+                <Button
+                  variant="outline"
+                  disabled={actions.joinTelegram}
+                  className="w-full h-14 justify-start text-left border-white/10 hover:border-white/20 hover:bg-white/5 transition-all"
+                  onClick={() => handleAction("joinTelegram")}
+                >
+                  <div className="flex items-center gap-3 flex-1">
+                    <div className="bg-[#229ED9] rounded-full p-2">
+                      <TelegramLogo />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Join Telegram</p>
+                      <p className="text-xs text-muted-foreground">Community group</p>
+                    </div>
+                  </div>
+                  {actions.joinTelegram && (
+                    <Check className="h-5 w-5 text-green-500" strokeWidth={3} />
+                  )}
+                </Button>
+              </motion.div>
 
               {/* Add Frame Button */}
-              <Button
-                variant="outline"
-                disabled={!!(context && context.client.added)}
-                className="w-full transition-colors"
-                onClick={() => handleAction("addFrame")}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
               >
-                <div className="flex items-center gap-3">
-                  <Heart className="h-5 w-5 text-pink-500" />
-                  <span>Add Frame</span>
-                </div>
-                {context && context.client.added && (
-                  <Check className="ml-auto h-4 w-4 text-green-500" />
-                )}
-              </Button>
+                <Button
+                  variant="outline"
+                  disabled={!!(context && context.client.added)}
+                  className="w-full h-14 justify-start text-left border-white/10 hover:border-white/20 hover:bg-white/5 transition-all"
+                  onClick={() => handleAction("addFrame")}
+                >
+                  <div className="flex items-center gap-3 flex-1">
+                    <div className="bg-gradient-to-br from-pink-500 to-rose-500 rounded-full p-2">
+                      <Heart className="h-5 w-5 text-white" fill="white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Add Frame</p>
+                      <p className="text-xs text-muted-foreground">Add to Farcaster</p>
+                    </div>
+                  </div>
+                  {context && context.client.added && (
+                    <Check className="h-5 w-5 text-green-500" strokeWidth={3} />
+                  )}
+                </Button>
+              </motion.div>
             </div>
           )}
 
-          <DrawerFooter>
+          <DrawerFooter className="pt-4">
             {!isRegistered && (
               <Button
                 onClick={handleDone}
                 disabled={mutation.isPending}
-                className="relative "
+                className="w-full h-12 bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 hover:from-indigo-600 hover:via-purple-700 hover:to-pink-600 font-semibold text-base shadow-lg"
+                size="lg"
               >
                 {mutation.isPending ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                     Processing...
                   </>
                 ) : (
-                  "Complete Registration"
+                  "Complete Registration ✨"
                 )}
               </Button>
             )}
             <DrawerClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline" className="w-full border-white/10 hover:bg-white/5">
+                Close
+              </Button>
             </DrawerClose>
           </DrawerFooter>
         </div>
@@ -398,20 +476,27 @@ interface SuccessAlertProps {
 function SuccessAlert({ message, subtitle }: SuccessAlertProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="w-full max-w-md mb-4"
+      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.4, type: "spring" }}
+      className="w-full max-w-md"
     >
-      <Alert className="border-green-500/30 bg-green-50/90 text-green-800 backdrop-blur-sm shadow-md">
-        <div className="flex items-start">
-          <div className="bg-green-100 rounded-full p-1 mr-3">
-            <Check className="h-4 w-4 text-green-600" />
-          </div>
-          <div>
-            <AlertTitle className="text-green-700">{message}</AlertTitle>
+      <Alert className="border-green-500/40 bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-md shadow-lg">
+        <div className="flex items-start gap-3">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="bg-gradient-to-br from-green-400 to-emerald-500 rounded-full p-2 shadow-md"
+          >
+            <Check className="h-5 w-5 text-white" strokeWidth={3} />
+          </motion.div>
+          <div className="flex-1">
+            <AlertTitle className="text-green-400 font-bold text-base mb-1">
+              {message}
+            </AlertTitle>
             {subtitle && (
-              <AlertDescription className="text-green-600/80">
+              <AlertDescription className="text-green-300/80 text-sm leading-relaxed">
                 {subtitle}
               </AlertDescription>
             )}

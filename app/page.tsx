@@ -37,7 +37,7 @@ export default function App() {
 
   console.log({ setFrameReady, isFrameReady, context });
   return (
-    <main className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 py-12 px-2">
+    <main className="relative w-full min-h-screen flex flex-col items-center justify-center px-4 py-12">
       <div className="relative z-10 max-w-4xl w-full mx-auto">
         {/* Logo Area */}
         <motion.div
