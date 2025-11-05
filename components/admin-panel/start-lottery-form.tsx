@@ -75,13 +75,14 @@ export default function StartLotteryForm() {
         });
       }
     }
-  }, [paymentTokenAddress]);
+  }, [paymentTokenAddress, chainId]);
 
   // Start lottery
   const {
     data: startHash,
     writeContract: startLottery,
     isPending: isStarting,
+    error: startError,
   } = useWriteContract();
   const { isLoading: isStartLoading, isSuccess: isStartSuccess } =
     useWaitForTransactionReceipt({
@@ -141,23 +142,42 @@ export default function StartLotteryForm() {
     });
   };
 
+  // Show transaction submitted toast
+  useEffect(() => {
+    if (startHash) {
+      const chainName = getChainName(chainId);
+      toast.info("Transaction submitted", {
+        description: `Starting lottery on ${chainName}. Waiting for confirmation...`,
+      });
+    }
+  }, [startHash, chainId]);
+
   // Show success toast
   useEffect(() => {
     if (isStartSuccess) {
-      // Get chain name using our utility
       const chainName = getChainName(chainId);
-      
-      toast.success(`Lottery started successfully on ${chainName}`, {
+
+      toast.success(`Lottery started successfully on ${chainName}!`, {
         description: `A new lottery round has been created on the ${chainName} network.`,
       });
 
-      // Reset form after success
-      setStartLotteryParams({
-        ...startLotteryParams,
-        endTime: "",
-      });
+      // Reset form after success - use functional update to avoid dependency
+      setStartLotteryParams((prev) => ({
+        ...prev,
+        endTime: getDefaultEndTime(),
+      }));
     }
   }, [isStartSuccess, chainId]);
+
+  // Show error toast
+  useEffect(() => {
+    if (startError) {
+      toast.error("Failed to start lottery", {
+        description:
+          startError.message || "An error occurred while starting the lottery",
+      });
+    }
+  }, [startError]);
 
   return (
     <Card>

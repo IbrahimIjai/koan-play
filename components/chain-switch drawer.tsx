@@ -1,7 +1,7 @@
 // components/ChainSwitcherDrawer.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount, useSwitchChain } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
 import { Button } from "@/components/ui/button";
@@ -24,14 +24,29 @@ const chainLogoMap: Record<number, string> = {
 export default function ChainSwitcherDrawer() {
   const [open, setOpen] = useState(false);
   const [switchingChainId, setSwitchingChainId] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
   const { isConnected, chainId } = useAccount();
   const { chains, switchChain, isPending } = useSwitchChain();
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Supported chains or use the ones from useSwitchChain
   const supportedChains = chains.length ? chains : [base, baseSepolia];
 
   // Get current chain info
   const currentChain = supportedChains.find((chain) => chain.id === chainId);
+
+  // Return placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button variant="outline" className="w-fit gap-2" disabled>
+        <span>Select Network</span>
+      </Button>
+    );
+  }
 
   // Handle chain switching
   const handleSwitchChain = (chainId: number) => {

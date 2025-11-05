@@ -1,8 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from "wagmi";
-import { formatUnits, parseUnits } from "viem";
+import {
+  useReadContract,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useAccount,
+} from "wagmi";
+import {  parseUnits } from "viem";
 import {
   Card,
   CardContent,
@@ -13,15 +18,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  RefreshCw, 
-  AlertCircle, 
-  ShieldAlert, 
-  DollarSign, 
-  Settings, 
+import {
+  RefreshCw,
+  AlertCircle,
+  ShieldAlert,
+  DollarSign,
+  Settings,
   Users,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { LOTTERY_ABI } from "@/configs/abis";
 import { CONTRACTS } from "@/configs/contracts-confg";
@@ -29,12 +33,7 @@ import { baseSepolia } from "viem/chains";
 import { getTokenByAddress } from "@/configs/token-list";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Form,
   FormControl,
@@ -47,7 +46,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Switch } from "@/components/ui/switch";
 
 export default function OperatorControls() {
   const { address } = useAccount();
@@ -101,7 +99,7 @@ export default function OperatorControls() {
     if (paymentTokenAddress) {
       const tokenInfo = getTokenByAddress(
         baseSepolia.id,
-        paymentTokenAddress as string
+        paymentTokenAddress as string,
       );
       if (tokenInfo) {
         setTokenInfo({
@@ -115,10 +113,14 @@ export default function OperatorControls() {
   // Check if current user is operator or owner
   useEffect(() => {
     if (address && operatorAddress) {
-      setIsOperator(address.toLowerCase() === (operatorAddress as string).toLowerCase());
+      setIsOperator(
+        address.toLowerCase() === (operatorAddress as string).toLowerCase(),
+      );
     }
     if (address && ownerAddress) {
-      setIsOwner(address.toLowerCase() === (ownerAddress as string).toLowerCase());
+      setIsOwner(
+        address.toLowerCase() === (ownerAddress as string).toLowerCase(),
+      );
     }
   }, [address, operatorAddress, ownerAddress]);
 
@@ -185,18 +187,21 @@ export default function OperatorControls() {
     data: setAddressesHash,
     writeContract: setAddresses,
     isPending: isSettingAddresses,
+    error: setAddressesError,
   } = useWriteContract();
 
   const {
     data: recoverTokensHash,
     writeContract: recoverTokens,
     isPending: isRecoveringTokens,
+    error: recoverTokensError,
   } = useWriteContract();
 
   const {
     data: injectFundsHash,
     writeContract: injectFunds,
     isPending: isInjectingFunds,
+    error: injectFundsError,
   } = useWriteContract();
 
   // Wait for transaction receipts
@@ -205,10 +210,12 @@ export default function OperatorControls() {
       hash: setAddressesHash,
     });
 
-  const { isLoading: isRecoverTokensLoading, isSuccess: isRecoverTokensSuccess } =
-    useWaitForTransactionReceipt({
-      hash: recoverTokensHash,
-    });
+  const {
+    isLoading: isRecoverTokensLoading,
+    isSuccess: isRecoverTokensSuccess,
+  } = useWaitForTransactionReceipt({
+    hash: recoverTokensHash,
+  });
 
   const { isLoading: isInjectFundsLoading, isSuccess: isInjectFundsSuccess } =
     useWaitForTransactionReceipt({
@@ -222,28 +229,32 @@ export default function OperatorControls() {
       abi: LOTTERY_ABI,
       functionName: "setOperatorAndTreasuryAndInjectorAddresses",
       args: [
-        values.operatorAddress,
-        values.treasuryAddress,
-        values.injectorAddress,
+        values.operatorAddress as `0x${string}`,
+        values.treasuryAddress as `0x${string}`,
+        values.injectorAddress as `0x${string}`,
       ],
     });
   };
 
   // Handle token recovery form submission
-  const onTokenRecoverySubmit = (values: z.infer<typeof tokenRecoveryFormSchema>) => {
+  const onTokenRecoverySubmit = (
+    values: z.infer<typeof tokenRecoveryFormSchema>,
+  ) => {
     recoverTokens({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
       abi: LOTTERY_ABI,
       functionName: "recoverWrongTokens",
       args: [
-        values.tokenAddress,
+        values.tokenAddress as `0x${string}`,
         parseUnits(values.amount, 18), // Assuming 18 decimals, should be adjusted based on token
       ],
     });
   };
 
   // Handle funds injection form submission
-  const onInjectFundsSubmit = (values: z.infer<typeof injectFundsFormSchema>) => {
+  const onInjectFundsSubmit = (
+    values: z.infer<typeof injectFundsFormSchema>,
+  ) => {
     injectFunds({
       address: CONTRACTS.LOTTERY.address[baseSepolia.id],
       abi: LOTTERY_ABI,
@@ -255,10 +266,37 @@ export default function OperatorControls() {
     });
   };
 
-  // Show success toasts
+  // Transaction submitted toasts
+  useEffect(() => {
+    if (setAddressesHash) {
+      toast.info("Transaction submitted", {
+        description: "Updating addresses. Waiting for confirmation...",
+      });
+    }
+  }, [setAddressesHash]);
+
+  useEffect(() => {
+    if (recoverTokensHash) {
+      toast.info("Transaction submitted", {
+        description: "Recovering tokens. Waiting for confirmation...",
+      });
+    }
+  }, [recoverTokensHash]);
+
+  useEffect(() => {
+    if (injectFundsHash) {
+      toast.info("Transaction submitted", {
+        description: "Injecting funds. Waiting for confirmation...",
+      });
+    }
+  }, [injectFundsHash]);
+
+  // Success toasts
   useEffect(() => {
     if (isAddressesSuccess) {
-      toast.success("Addresses updated successfully");
+      toast.success("Addresses updated successfully!", {
+        description: "Lottery addresses have been updated.",
+      });
       // Refresh the page to get updated addresses
       window.location.reload();
     }
@@ -266,17 +304,46 @@ export default function OperatorControls() {
 
   useEffect(() => {
     if (isRecoverTokensSuccess) {
-      toast.success("Tokens recovered successfully");
+      toast.success("Tokens recovered successfully!", {
+        description: "Tokens have been recovered from the lottery contract.",
+      });
       tokenRecoveryForm.reset();
     }
-  }, [isRecoverTokensSuccess]);
+  }, [isRecoverTokensSuccess, tokenRecoveryForm]);
 
   useEffect(() => {
     if (isInjectFundsSuccess) {
-      toast.success("Funds injected successfully");
+      toast.success("Funds injected successfully!", {
+        description: "Funds have been added to the lottery prize pool.",
+      });
       injectFundsForm.reset();
     }
-  }, [isInjectFundsSuccess]);
+  }, [isInjectFundsSuccess, injectFundsForm]);
+
+  // Error toasts
+  useEffect(() => {
+    if (setAddressesError) {
+      toast.error("Failed to update addresses", {
+        description: setAddressesError.message || "An error occurred",
+      });
+    }
+  }, [setAddressesError]);
+
+  useEffect(() => {
+    if (recoverTokensError) {
+      toast.error("Failed to recover tokens", {
+        description: recoverTokensError.message || "An error occurred",
+      });
+    }
+  }, [recoverTokensError]);
+
+  useEffect(() => {
+    if (injectFundsError) {
+      toast.error("Failed to inject funds", {
+        description: injectFundsError.message || "An error occurred",
+      });
+    }
+  }, [injectFundsError]);
 
   // If not operator or owner, show access denied
   if (!isOperator && !isOwner) {
@@ -284,14 +351,17 @@ export default function OperatorControls() {
       <Card>
         <CardHeader>
           <CardTitle>Operator Controls</CardTitle>
-          <CardDescription>Advanced lottery management functions</CardDescription>
+          <CardDescription>
+            Advanced lottery management functions
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Alert variant="destructive">
             <ShieldAlert className="h-4 w-4" />
             <AlertTitle>Access Denied</AlertTitle>
             <AlertDescription>
-              You must be the contract owner or operator to access these controls.
+              You must be the contract owner or operator to access these
+              controls.
               <br />
               Current operator: {operatorAddress || "Loading..."}
               <br />
@@ -308,7 +378,9 @@ export default function OperatorControls() {
       <Card>
         <CardHeader>
           <CardTitle>Operator Controls</CardTitle>
-          <CardDescription>Advanced lottery management functions</CardDescription>
+          <CardDescription>
+            Advanced lottery management functions
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="addresses" className="w-full">
@@ -332,14 +404,19 @@ export default function OperatorControls() {
                 <Settings className="h-4 w-4" />
                 <AlertTitle>Address Configuration</AlertTitle>
                 <AlertDescription>
-                  Update the operator, treasury, and injector addresses for the lottery contract.
+                  Update the operator, treasury, and injector addresses for the
+                  lottery contract.
                   <br />
-                  <strong>Note:</strong> Only the contract owner can update these addresses.
+                  <strong>Note:</strong> Only the contract owner can update
+                  these addresses.
                 </AlertDescription>
               </Alert>
 
               <Form {...addressForm}>
-                <form onSubmit={addressForm.handleSubmit(onAddressSubmit)} className="space-y-4">
+                <form
+                  onSubmit={addressForm.handleSubmit(onAddressSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={addressForm.control}
                     name="operatorAddress"
@@ -393,7 +470,9 @@ export default function OperatorControls() {
 
                   <Button
                     type="submit"
-                    disabled={!isOwner || isSettingAddresses || isAddressesLoading}
+                    disabled={
+                      !isOwner || isSettingAddresses || isAddressesLoading
+                    }
                     className="w-full"
                   >
                     {isSettingAddresses || isAddressesLoading ? (
@@ -416,12 +495,18 @@ export default function OperatorControls() {
                 <AlertDescription>
                   Recover tokens accidentally sent to the lottery contract.
                   <br />
-                  <strong>Note:</strong> You cannot recover the payment token used by the lottery.
+                  <strong>Note:</strong> You cannot recover the payment token
+                  used by the lottery.
                 </AlertDescription>
               </Alert>
 
               <Form {...tokenRecoveryForm}>
-                <form onSubmit={tokenRecoveryForm.handleSubmit(onTokenRecoverySubmit)} className="space-y-4">
+                <form
+                  onSubmit={tokenRecoveryForm.handleSubmit(
+                    onTokenRecoverySubmit,
+                  )}
+                  className="space-y-4"
+                >
                   <FormField
                     control={tokenRecoveryForm.control}
                     name="tokenAddress"
@@ -458,7 +543,9 @@ export default function OperatorControls() {
 
                   <Button
                     type="submit"
-                    disabled={!isOwner || isRecoveringTokens || isRecoverTokensLoading}
+                    disabled={
+                      !isOwner || isRecoveringTokens || isRecoverTokensLoading
+                    }
                     className="w-full"
                   >
                     {isRecoveringTokens || isRecoverTokensLoading ? (
@@ -479,14 +566,19 @@ export default function OperatorControls() {
                 <DollarSign className="h-4 w-4" />
                 <AlertTitle>Inject Funds</AlertTitle>
                 <AlertDescription>
-                  Inject additional funds into a lottery to increase the prize pool.
+                  Inject additional funds into a lottery to increase the prize
+                  pool.
                   <br />
-                  <strong>Note:</strong> Only the owner or injector can inject funds.
+                  <strong>Note:</strong> Only the owner or injector can inject
+                  funds.
                 </AlertDescription>
               </Alert>
 
               <Form {...injectFundsForm}>
-                <form onSubmit={injectFundsForm.handleSubmit(onInjectFundsSubmit)} className="space-y-4">
+                <form
+                  onSubmit={injectFundsForm.handleSubmit(onInjectFundsSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={injectFundsForm.control}
                     name="lotteryId"
@@ -494,7 +586,12 @@ export default function OperatorControls() {
                       <FormItem>
                         <FormLabel>Lottery ID</FormLabel>
                         <FormControl>
-                          <Input placeholder="1" type="number" min="1" {...field} />
+                          <Input
+                            placeholder="1"
+                            type="number"
+                            min="1"
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
                           The ID of the lottery to inject funds into

@@ -34,6 +34,7 @@ export default function LotterySettings() {
     isPending: isSettingAddresses,
     isSuccess: isSetAddressesSuccess,
     reset: resetSetAddresses,
+    error: setAddressesError,
   } = useWriteContract();
 
   const { isLoading: isAddressesLoading, isSuccess: isAddressesSuccess } =
@@ -74,27 +75,41 @@ export default function LotterySettings() {
     });
   };
 
-  // Show success toast
+  // Transaction submitted toast
+  useEffect(() => {
+    if (setAddressesHash) {
+      toast.info("Transaction submitted", {
+        description: "Updating lottery addresses. Waiting for confirmation...",
+      });
+    }
+  }, [setAddressesHash]);
+
+  // Success toast
   useEffect(() => {
     if (isAddressesSuccess) {
-      toast.success("Addresses updated successfully", {
+      toast.success("Addresses updated successfully!", {
         description:
           "The operator, treasury, and injector addresses have been updated.",
       });
 
-      if (isSetAddressesSuccess) {
-        toast.success("Addresses updated successfully", {
-          description:
-            "The operator, treasury, and injector addresses have been updated.",
-        });
-      }
-      // Reset frm after success
+      // Reset form after success
       setOperatorAddress("");
       setTreasuryAddress("");
       setInjectorAddress("");
       resetSetAddresses();
     }
   }, [isAddressesSuccess, isSetAddressesSuccess, resetSetAddresses]);
+
+  // Error toast
+  useEffect(() => {
+    if (setAddressesError) {
+      toast.error("Failed to update addresses", {
+        description:
+          setAddressesError.message ||
+          "An error occurred while updating addresses",
+      });
+    }
+  }, [setAddressesError]);
 
   // Validate Ethereum address
   const isValidAddress = (address: string) => {

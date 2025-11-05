@@ -29,6 +29,7 @@ export default function LotteryActions({
     data: closeHash,
     writeContract: closeLottery,
     isPending: isClosing,
+    error: closeError,
   } = useWriteContract();
   const { isLoading: isCloseLoading, isSuccess: isCloseSuccess } =
     useWaitForTransactionReceipt({
@@ -40,6 +41,7 @@ export default function LotteryActions({
     data: drawHash,
     writeContract: drawFinalNumber,
     isPending: isDrawing,
+    error: drawError,
   } = useWriteContract();
   const { isLoading: isDrawLoading, isSuccess: isDrawSuccess } =
     useWaitForTransactionReceipt({
@@ -70,22 +72,59 @@ export default function LotteryActions({
     });
   };
 
-  // Show success toasts
+  // Transaction submitted toasts
+  useEffect(() => {
+    if (closeHash) {
+      toast.info("Transaction submitted", {
+        description: "Closing lottery. Waiting for confirmation...",
+      });
+    }
+  }, [closeHash]);
+
+  useEffect(() => {
+    if (drawHash) {
+      toast.info("Transaction submitted", {
+        description: "Drawing final number. Waiting for confirmation...",
+      });
+    }
+  }, [drawHash]);
+
+  // Success toasts
   useEffect(() => {
     if (isCloseSuccess) {
-      toast.success("Lottery closed successfully", {
-        description: `Lottery #${lotteryId?.toString()} has been closed.`,
+      toast.success("Lottery closed successfully!", {
+        description: `Lottery #${lotteryId?.toString()} has been closed. Ready to draw final number.`,
       });
     }
   }, [isCloseSuccess, lotteryId]);
 
   useEffect(() => {
     if (isDrawSuccess) {
-      toast.success("Final number drawn successfully", {
-        description: `Lottery #${lotteryId?.toString()} is now claimable.`,
+      toast.success("Final number drawn successfully!", {
+        description: `Lottery #${lotteryId?.toString()} is now claimable. Winners can claim prizes.`,
       });
     }
   }, [isDrawSuccess, lotteryId]);
+
+  // Error toasts
+  useEffect(() => {
+    if (closeError) {
+      toast.error("Failed to close lottery", {
+        description:
+          closeError.message || "An error occurred while closing the lottery",
+      });
+    }
+  }, [closeError]);
+
+  useEffect(() => {
+    if (drawError) {
+      toast.error("Failed to draw final number", {
+        description:
+          drawError.message ||
+          "An error occurred while drawing the final number",
+      });
+    }
+  }, [drawError]);
 
   // Determine button states
   const canClose = lotteryStatus === 1;

@@ -44,7 +44,7 @@ export default async function RootLayout({
     // const headersObj = await headers();
     // const cookies = headersObj.get("cookie");
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="">
         <Providers 
         // cookies={cookies}

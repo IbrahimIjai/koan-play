@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LotteryDetails from "./lottery-details";
@@ -9,12 +10,41 @@ import LotteryStatistics from "./lottery-statistics";
 import LotteryWinners from "./lottery-winners";
 import OperatorControls from "./operator-controls";
 import ConnectButton from "@/components/connect-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function AdminPanelV3() {
+  const [mounted, setMounted] = useState(false);
   const { isConnected, address } = useAccount();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex flex-col items-center justify-center p-6 space-y-4 text-center">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Loading Admin Panel...</CardTitle>
+            <CardDescription>
+              Please wait while we load the administration panel
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <div className="animate-pulse">Loading...</div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (!isConnected) {
     return (
@@ -23,7 +53,8 @@ export function AdminPanelV3() {
           <CardHeader>
             <CardTitle>Admin Access Required</CardTitle>
             <CardDescription>
-              Please connect your wallet to access the lottery administration panel
+              Please connect your wallet to access the lottery administration
+              panel
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">

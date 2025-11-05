@@ -30,6 +30,7 @@ export default function RandomGeneratorSettings() {
     data: setKeyHashHash,
     writeContract: setKeyHashContract,
     isPending: isSettingKeyHash,
+    error: setKeyHashError,
   } = useWriteContract();
   const { isLoading: isKeyHashLoading, isSuccess: isKeyHashSuccess } =
     useWaitForTransactionReceipt({
@@ -61,10 +62,19 @@ export default function RandomGeneratorSettings() {
     });
   };
 
-  // Show success toast
+  // Transaction submitted toast
+  useEffect(() => {
+    if (setKeyHashHash) {
+      toast.info("Transaction submitted", {
+        description: "Updating key hash. Waiting for confirmation...",
+      });
+    }
+  }, [setKeyHashHash]);
+
+  // Success toast
   useEffect(() => {
     if (isKeyHashSuccess) {
-      toast.success("Key hash updated successfully", {
+      toast.success("Key hash updated successfully!", {
         description: "The random number generator key hash has been updated.",
       });
 
@@ -72,6 +82,17 @@ export default function RandomGeneratorSettings() {
       setKeyHash("");
     }
   }, [isKeyHashSuccess]);
+
+  // Error toast
+  useEffect(() => {
+    if (setKeyHashError) {
+      toast.error("Failed to update key hash", {
+        description:
+          setKeyHashError.message ||
+          "An error occurred while updating the key hash",
+      });
+    }
+  }, [setKeyHashError]);
 
   // Validate key hash
   const isValidKeyHash = (hash: string) => {

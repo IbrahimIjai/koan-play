@@ -31,7 +31,7 @@ export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
       [base.id]: ZERO_ADDRESS, // TODO: Deploy to Base Mainnet
-      [baseSepolia.id]: "0x6e2337A4D7BEAF9a9313D82A9c55B79e86e1351C",
+      [baseSepolia.id]: "0xE016F44f24D19C3359B053e0315367F698aEe34F",
       [monadTestnet.id]: ZERO_ADDRESS, // TODO: Deploy to Monad Testnet
     },
     LOTTERY_ABI,

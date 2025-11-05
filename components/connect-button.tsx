@@ -24,6 +24,7 @@ export default function ConnectButton() {
   const { disconnect } = useDisconnect();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Query ETH balance
   const {
@@ -44,6 +45,11 @@ export default function ConnectButton() {
     token: CONTRACTS.PAYMENT_TOKEN.address[chainId ?? baseSepolia.id],
   });
 
+  // Handle hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Refresh balances when drawer opens
   useEffect(() => {
     if (isOpen && address) {
@@ -51,6 +57,15 @@ export default function ConnectButton() {
       refetchUsdc();
     }
   }, [isOpen, address, refetchEth, refetchUsdc]);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button size="sm" disabled>
+        Connect
+      </Button>
+    );
+  }
 
   // const { open } = useAppKit();
   return (
