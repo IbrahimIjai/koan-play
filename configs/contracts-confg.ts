@@ -1,27 +1,21 @@
-// import { base, baseSepolia } from "viem/chains";
-
-// export const RANDOMNUMBER_GENERATOR = {
-//   [baseSepolia.id]: "0x9A8A568891031EEF8df7A8dC8976b976ad2243D3",
-//   //   [base.id]: "0x9A8A568891031EEF8df7A8dC8976b976ad2243D3",
-// };
-
-// export const KOAN_LOTTERY_CONTRACT = {
-//   [baseSepolia.id]: "0x6BA6E5d63dc7B87b8D3E13627221aEE83e0165c1",
-//   //   [base.id]: "0x9A8A568891031EEF8df7A8dC8976b976ad2243D3",
-// };
-
-import { base, baseSepolia } from "viem/chains";
-import { Abi, erc20Abi } from "viem";
+import { base, baseSepolia, monadTestnet } from "viem/chains";
+import { type Abi, erc20Abi } from "viem";
 import { LOTTERY_ABI, RANDOMNUMBER_GENERATOR_ABI } from "./abis";
 
-// Define type for type-safe contract configurations
 export type ContractConfig = {
-  address: Record<number, `0x${string}`>;
-  abi: Abi;
-  chainSupported: number[];
+  readonly address: Readonly<Record<number, `0x${string}`>>;
+  readonly abi: Abi;
+  readonly chainSupported: readonly number[];
 };
 
-// Helper function to create contract configurations
+export const SUPPORTED_CHAIN_IDS = [
+  base.id,
+  baseSepolia.id,
+  monadTestnet.id,
+] as const;
+
+export type SupportedChainId = (typeof SUPPORTED_CHAIN_IDS)[number];
+
 const createContractConfig = (
   addresses: Record<number, `0x${string}`>,
   abi: Abi,
@@ -34,40 +28,62 @@ const createContractConfig = (
 export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
-      [baseSepolia.id]: "0x5567202962A48b6273f7387e68215dc6911eD5a4",
-      [base.id]: "0x287e489c9bd86D64FDa843d26A71bcd804d78943",
+      [base.id]: "0x0000000000000000000000000000000000000000",
+      [baseSepolia.id]: "0x6e2337A4D7BEAF9a9313D82A9c55B79e86e1351C",
+      [monadTestnet.id]: "0x0000000000000000000000000000000000000000", // TODO: Deploy
     },
     LOTTERY_ABI,
   ),
   PAYMENT_TOKEN: createContractConfig(
     {
-      [baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
       [base.id]: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      [baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      [monadTestnet.id]: "0x0000000000000000000000000000000000000000", // TODO: Deploy
     },
     erc20Abi,
   ),
   RANDOM_NUMBER_GENERATOR: createContractConfig(
     {
-      [baseSepolia.id]: "0x41074ECC1C972Ab15bfFa2814d7cc309C7ebe3CD",
-      [base.id]: "0xdBC6887Df51147D37da1430A7b1361c3AA2DA54c",
+      [base.id]: "0x0000000000000000000000000000000000000000",
+      [baseSepolia.id]: "0x825DA733cCf86aED57E3A0a3799Bd0104c9cbA53",
+      [monadTestnet.id]: "0x0000000000000000000000000000000000000000", // TODO: Deploy
     },
     RANDOMNUMBER_GENERATOR_ABI,
   ),
 } as const;
 
-// Type exports for easy consumption
 export type ContractName = keyof typeof CONTRACTS;
-export type SupportedChain = typeof baseSepolia | typeof base;
 
-// Helper function to get contract info
 export const getContractConfig = (
   contractName: ContractName,
   chainId: number,
 ) => {
   const contract = CONTRACTS[contractName];
+  const address = contract.address[chainId];
+
+  if (!address || address === "0x0000000000000000000000000000000000000000") {
+    throw new Error(
+      `Contract ${contractName} is not deployed on chain ${chainId}`,
+    );
+  }
+
   return {
-    address: contract.address[chainId],
+    address,
     abi: contract.abi,
     chainId,
-  };
+  } as const;
+};
+
+export const isContractDeployed = (
+  contractName: ContractName,
+  chainId: number,
+): boolean => {
+  const address = CONTRACTS[contractName].address[chainId];
+  return !!address && address !== "0x0000000000000000000000000000000000000000";
+};
+
+export const getDeployedChains = (contractName: ContractName): number[] => {
+  return CONTRACTS[contractName].chainSupported.filter((chainId) =>
+    isContractDeployed(contractName, chainId),
+  );
 };
