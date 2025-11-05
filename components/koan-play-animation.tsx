@@ -373,7 +373,9 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Follow on X</p>
-                      <p className="text-xs text-muted-foreground">@koanprotocol</p>
+                      <p className="text-xs text-muted-foreground">
+                        @koanprotocol
+                      </p>
                     </div>
                   </div>
                   {actions.followX && (
@@ -400,7 +402,9 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Join Telegram</p>
-                      <p className="text-xs text-muted-foreground">Community group</p>
+                      <p className="text-xs text-muted-foreground">
+                        Community group
+                      </p>
                     </div>
                   </div>
                   {actions.joinTelegram && (
@@ -427,7 +431,9 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium">Add Frame</p>
-                      <p className="text-xs text-muted-foreground">Add to Farcaster</p>
+                      <p className="text-xs text-muted-foreground">
+                        Add to Farcaster
+                      </p>
                     </div>
                   </div>
                   {context && context.client.added && (
@@ -457,7 +463,10 @@ function TaskDrawer({ isRegistered, userFid }: TaskDrawerProps) {
               </Button>
             )}
             <DrawerClose asChild>
-              <Button variant="outline" className="w-full border-white/10 hover:bg-white/5">
+              <Button
+                variant="outline"
+                className="w-full border-white/10 hover:bg-white/5"
+              >
                 Close
               </Button>
             </DrawerClose>

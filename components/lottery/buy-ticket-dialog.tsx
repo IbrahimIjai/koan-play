@@ -255,14 +255,17 @@ export default function BuyTicketDialog({
   const OpenDialogButton = () => {
     const disabled =
       !isLotteryOpen || !currentLotteryId || currentLotteryId === 0n;
+
+    const noLotteryStarted = !currentLotteryId || currentLotteryId === 0n;
+
     const statusTag = !isLotteryOpen &&
       currentLotteryId &&
       currentLotteryId > 0n && (
         <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
           {Number(lotteryInfo?.status) === 0
-            ? "Preparing"
+            ? "Starting Soon"
             : Number(lotteryInfo?.status) === 2
-              ? "Processing"
+              ? "Drawing"
               : Number(lotteryInfo?.status) === 3
                 ? "Claimable"
                 : "Unavailable"}
@@ -273,7 +276,7 @@ export default function BuyTicketDialog({
     const buttonContent = (
       <div className="flex items-center gap-2">
         <Ticket className="mr-2 h-5 w-5" />
-        {buttonText}
+        {noLotteryStarted ? "No Active Lottery" : buttonText}
         {statusTag}
       </div>
     );
@@ -435,13 +438,29 @@ export default function BuyTicketDialog({
               </p>
               <ConnectButton />
             </div>
+          ) : !currentLotteryId || currentLotteryId === 0n ? (
+            <div className="flex flex-col items-center justify-center p-8 space-y-4 text-center">
+              <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center">
+                <AlertCircle className="w-8 h-8 text-amber-500" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">No Active Lottery</h3>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  The first lottery hasn&apos;t been started yet. An operator
+                  needs to initialize the lottery round. Check back soon!
+                </p>
+              </div>
+            </div>
           ) : !isLotteryOpen ? (
             <Alert variant="destructive">
               <AlertCircle className="w-4 h-4" />
               <AlertTitle>Lottery Not Open</AlertTitle>
               <AlertDescription>
                 The current lottery round is not open for ticket purchases.
-                Please wait for the next round to start.
+                {Number(lotteryInfo?.status) === 2 &&
+                  " Drawing is in progress."}
+                {Number(lotteryInfo?.status) === 3 &&
+                  " This round has ended. Wait for the next one!"}
               </AlertDescription>
             </Alert>
           ) : showTransactionUI ? (

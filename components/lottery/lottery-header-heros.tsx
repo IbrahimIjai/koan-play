@@ -101,12 +101,18 @@ export default function LotteryHeader() {
 
   const buttonText = useMemo(() => {
     if (!lotteryInfo) return "Loading...";
+
+    // Check if this is a new contract with no lottery started yet
+    if (currentLotteryId === 0n || !currentLotteryId) {
+      return "No Active Lottery";
+    }
+
     const status = Number(lotteryInfo.status);
     switch (status) {
       case LotteryStatus.Open:
         return "Get Tickets";
       case LotteryStatus.Pending:
-        return "Lottery Preparing";
+        return "Lottery Starting Soon";
       case LotteryStatus.Close:
         return "Drawing in Progress";
       case LotteryStatus.Claimable:
@@ -114,7 +120,9 @@ export default function LotteryHeader() {
       default:
         return "Unavailable";
     }
-  }, [lotteryInfo]);
+  }, [lotteryInfo, currentLotteryId]);
+
+  const showNoLotteryMessage = currentLotteryId === 0n || !currentLotteryId;
 
   const isLoading = isLoadingId || isLoadingInfo || isLoadingUserTickets;
   const hasError = isIdError || isInfoError;
@@ -150,6 +158,26 @@ export default function LotteryHeader() {
           <Skeleton className="h-12 w-48" />
           <Skeleton className="h-10 w-40 mt-4" />
         </div>
+      ) : showNoLotteryMessage ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full"
+        >
+          <Alert className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-amber-500/30">
+            <AlertCircle className="h-5 w-5 text-amber-500" />
+            <div className="ml-2">
+              <h3 className="font-semibold text-lg text-amber-500 mb-1">
+                No Active Lottery
+              </h3>
+              <AlertDescription className="text-sm text-muted-foreground">
+                The operator needs to start the first lottery round. Check back
+                soon or contact an admin to begin the lottery!
+              </AlertDescription>
+            </div>
+          </Alert>
+        </motion.div>
       ) : (
         <>
           <motion.div
