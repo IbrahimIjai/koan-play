@@ -30,10 +30,10 @@ import { useAccount } from "wagmi";
 export default function StartLotteryForm() {
   const { chainId } = useAccount();
 
-  // Calculate default end time (current time + 1 hour + 5 minutes)
+  // Calculate default end time (current time + 4.5 minutes)
   const getDefaultEndTime = () => {
     const date = new Date();
-    date.setMinutes(date.getMinutes() + 65);
+    date.setSeconds(date.getSeconds() + 270); // 4.5 minutes (270 seconds)
     return date.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
   };
 
