@@ -31,7 +31,7 @@ export const CONTRACTS = {
   LOTTERY: createContractConfig(
     {
       [base.id]: ZERO_ADDRESS, // TODO: Deploy to Base Mainnet
-      [baseSepolia.id]: "0xA3D4c6C4C387A96078ACbFB2879119D23FD267C9",
+      [baseSepolia.id]: "0xfdfB8DcdC14DD16cad24b8D5DF8F2E31388E5b59",
       [monadTestnet.id]: ZERO_ADDRESS, // TODO: Deploy to Monad Testnet
     },
     LOTTERY_ABI,
@@ -47,7 +47,7 @@ export const CONTRACTS = {
   RANDOM_NUMBER_GENERATOR: createContractConfig(
     {
       [base.id]: ZERO_ADDRESS, // TODO: Deploy to Base Mainnet
-      [baseSepolia.id]: "0x825DA733cCf86aED57E3A0a3799Bd0104c9cbA53",
+      [baseSepolia.id]: "0xf14D99b89C2AD7b68216586e1a15e1ad0bfa32BA",
       [monadTestnet.id]: ZERO_ADDRESS, // TODO: Deploy to Monad Testnet
     },
     RANDOMNUMBER_GENERATOR_ABI,

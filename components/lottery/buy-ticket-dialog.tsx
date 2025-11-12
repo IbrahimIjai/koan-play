@@ -131,6 +131,7 @@ export default function BuyTicketDialog({
     isPending: isBuying,
     isSuccess: isSubmitted,
     reset,
+    error: buyError,
   } = useWriteContract();
 
   const { isLoading: isBuyLoading, isSuccess: isTransactionSuccess } =
@@ -155,35 +156,117 @@ export default function BuyTicketDialog({
   }, [paymentTokenAddress, chainId]);
 
   // Effect to handle transaction success
+  // Success state handler
   useEffect(() => {
     if (isTransactionSuccess) {
-      // Simulate getting ticket IDs from the transaction
       const ticketIds = ticketNumbers
         .split(",")
-        .map((num) => Number.parseInt(num.trim()));
+        .map((num) => Number.parseInt(num.trim()))
+        .filter((n) => !Number.isNaN(n));
       setPurchasedTickets(ticketIds);
-
-      // Show success toast
       toast.success("Tickets purchased successfully!", {
-        description: `You've purchased ${ticketCount} ticket${ticketCount !== 1 ? "s" : ""}.`,
+        description: `You've purchased ${ticketIds.length} ticket${ticketIds.length !== 1 ? "s" : ""}.`,
         duration: 5000,
       });
     }
-  }, [isTransactionSuccess, ticketCount, ticketNumbers]);
+  }, [isTransactionSuccess, ticketNumbers]);
+
+  // Transaction submitted toast
+  useEffect(() => {
+    if (buyHash) {
+      toast.info("Transaction submitted", {
+        description: "Waiting for confirmation...",
+      });
+    }
+  }, [buyHash]);
+
+  // Error toast
+  useEffect(() => {
+    if (buyError) {
+      const message = getReadableError(buyError);
+      toast.error("Ticket purchase failed", {
+        description: message,
+        duration: 6500,
+      });
+    }
+  }, [buyError]);
+
+  // Helper: human-friendly error message
+  const getReadableError = (err: unknown) => {
+    if (!err) return "Unknown error";
+    const raw =
+      typeof err === "object" && err !== null && "message" in err
+        ? String((err as { message?: unknown }).message)
+        : String(err);
+    if (/User rejected|User denied|Rejected/.test(raw))
+      return "You rejected the transaction";
+    if (/insufficient funds/i.test(raw))
+      return "Insufficient balance for gas or token payment";
+    if (/execution reverted/i.test(raw))
+      return raw.replace(
+        /.*execution reverted:?\s?/i,
+        "Transaction reverted: ",
+      );
+    return raw.length > 180 ? raw.slice(0, 180) + "…" : raw;
+  };
 
   const handleBuyTickets = () => {
-    if (!currentLotteryId || !ticketNumbers || !lotteryAddress) return;
+    if (!currentLotteryId || !lotteryAddress) return;
+    if (!ticketNumbers) {
+      toast.error("No tickets entered", {
+        description: "Enter or generate ticket numbers first.",
+      });
+      return;
+    }
 
     const numbers = ticketNumbers
       .split(",")
-      .map((num) => Number.parseInt(num.trim()));
+      .map((num) => Number.parseInt(num.trim()))
+      .filter((n) => !Number.isNaN(n));
 
-    buyTickets({
-      address: lotteryAddress,
-      abi: LOTTERY_ABI,
-      functionName: "buyTickets",
-      args: [currentLotteryId, numbers],
-    });
+    if (numbers.length === 0) {
+      toast.error("Invalid ticket numbers", {
+        description: "Could not parse any valid numbers.",
+      });
+      return;
+    }
+
+    // Optional: ensure count matches ticketCount (warn user)
+    if (numbers.length !== ticketCount) {
+      toast.info("Adjusting ticket count", {
+        description: `Detected ${numbers.length} numbers. Updating ticket count to match.`,
+      });
+      setTicketCount(numbers.length);
+    }
+
+    // Validate numeric range
+    const outOfRange = numbers.filter((n) => n < 1000000 || n > 1999999);
+    if (outOfRange.length) {
+      toast.error("Ticket number out of range", {
+        description: `All tickets must be between 1000000 and 1999999. Invalid: ${outOfRange.slice(0, 3).join(", ")}${outOfRange.length > 3 ? "…" : ""}`,
+      });
+      return;
+    }
+
+    // Prevent duplicate numbers (optional warning)
+    const dupes = numbers.filter((n, i, arr) => arr.indexOf(n) !== i);
+    if (dupes.length) {
+      toast.warning?.("Duplicate tickets detected", {
+        description: `Duplicates may reduce winning diversity: ${[...new Set(dupes)].slice(0, 4).join(", ")}${dupes.length > 4 ? "…" : ""}`,
+      });
+    }
+
+    try {
+      buyTickets({
+        address: lotteryAddress,
+        abi: LOTTERY_ABI,
+        functionName: "buyTickets",
+        args: [currentLotteryId, numbers],
+      });
+    } catch (err) {
+      const message = getReadableError(err);
+      toast.error("Failed to submit transaction", { description: message });
+    }
   };
 
   const generateRandomTickets = useCallback(() => {
@@ -413,6 +496,7 @@ export default function BuyTicketDialog({
   const showTransactionUI =
     isBuying ||
     isBuyLoading ||
+    buyError ||
     (isTransactionSuccess && purchasedTickets.length > 0);
 
   return (
@@ -464,7 +548,42 @@ export default function BuyTicketDialog({
               </AlertDescription>
             </Alert>
           ) : showTransactionUI ? (
-            renderTransactionStatus()
+            buyError ? (
+              <div className="flex flex-col items-center justify-center py-10 space-y-5 text-center">
+                <AlertCircle className="w-12 h-12 text-red-500" />
+                <h3 className="text-xl font-semibold">Transaction Failed</h3>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  {getReadableError(buyError)}
+                </p>
+                <div className="flex gap-3 w-full max-w-xs">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => {
+                      // allow user to retry without closing modal
+                      handleBuyTickets();
+                    }}
+                  >
+                    Retry
+                  </Button>
+                  <Button
+                    className="flex-1"
+                    onClick={() => {
+                      reset();
+                      setPurchasedTickets([]);
+                      setTicketsCopied(false);
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </div>
+                <Button variant="ghost" onClick={handleCloseDialog}>
+                  Close
+                </Button>
+              </div>
+            ) : (
+              renderTransactionStatus()
+            )
           ) : (
             <>
               <div className="grid gap-4 py-4">

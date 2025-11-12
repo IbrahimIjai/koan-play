@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   useReadContract,
   useWriteContract,
@@ -30,12 +30,22 @@ import { useAccount } from "wagmi";
 export default function StartLotteryForm() {
   const { chainId } = useAccount();
 
-  // Calculate default end time (current time + 4.5 minutes)
-  const getDefaultEndTime = () => {
-    const date = new Date();
-    date.setSeconds(date.getSeconds() + 270); // 4.5 minutes (270 seconds)
-    return date.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:MM
+  // Format a Date to 'YYYY-MM-DDTHH:mm' in LOCAL time for <input type="datetime-local">
+  const formatLocalDateTime = (date: Date) => {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
+
+  // Calculate default end time (current time + 4.5 minutes) using LOCAL time formatting
+  const getDefaultEndTime = useCallback(() => {
+    const date = new Date(Date.now() + 270 * 1000); // 4.5 minutes (270 seconds)
+    return formatLocalDateTime(date);
+  }, []);
 
   const [startLotteryParams, setStartLotteryParams] = useState({
     endTime: getDefaultEndTime(),
@@ -99,6 +109,23 @@ export default function StartLotteryForm() {
     if (endTimeSeconds <= now) {
       toast.error("Invalid end time", {
         description: "End time must be in the future",
+      });
+      return;
+    }
+
+    // Pre-validate contract window: (end - now) must be > 4 minutes and < 10 minutes
+    const duration = endTimeSeconds - now; // seconds
+    const MIN = 4 * 60; // 240s
+    const MAX = 10 * 60; // 600s
+    if (duration <= MIN) {
+      toast.error("End time too soon", {
+        description: "Lottery must end more than 4 minutes from now.",
+      });
+      return;
+    }
+    if (duration >= MAX) {
+      toast.error("End time too far", {
+        description: "Lottery must end in less than 10 minutes from now.",
       });
       return;
     }
@@ -167,7 +194,7 @@ export default function StartLotteryForm() {
         endTime: getDefaultEndTime(),
       }));
     }
-  }, [isStartSuccess, chainId]);
+  }, [isStartSuccess, chainId, getDefaultEndTime]);
 
   // Show error toast
   useEffect(() => {
