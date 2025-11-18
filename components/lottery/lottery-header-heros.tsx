@@ -45,7 +45,7 @@ export default function LotteryHeader() {
     isError: isInfoError,
   } = useReadContract({
     address: lotteryAddress,
-    abi: LOTTERY_ABI,
+    abi: LOTTERY_ABI, 
     functionName: "viewLottery",
     args: [currentLotteryId || 0n],
     chainId,
